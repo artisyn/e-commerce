@@ -3,15 +3,17 @@ import styled from 'styled-components';
 import { globalStyles } from '../styles/gStyles';
 import { IoSearchSharp } from 'react-icons/io5';
 import Badge from '@mui/material/Badge';
-import MailIcon from '@mui/icons-material/Mail';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 const Container = styled.div`
-	border: 4px solid black;
+	border: 1px solid black;
 	height: 5rem;
+	display: flex;
+	align-items: center;
 `;
 
 const Wrapper = styled.div`
-	border: 1px solid green;
+	flex: 1;
+	/* border: 1px solid green; */
 	padding: 0.7rem 1.4rem;
 	display: flex;
 	align-items: center;
@@ -34,6 +36,7 @@ const Language = styled.span`
 `;
 const Logo = styled.h1`
 	font-weight: bold;
+	margin: 0;
 `;
 
 const MenuItem = styled.div`
@@ -45,18 +48,22 @@ const Left = styled.div`
 	display: flex;
 	align-items: center;
 	gap: 1rem;
-	border: 1px solid red;
+	/* border: 1px solid red; */
 	flex: 1;
-	background-color: grey;
+	/* background-color: grey; */
 `;
 const Center = styled.div`
 	flex: 1;
-	background-color: #6c8d9c;
+	/* background-color: #6c8d9c; */
 	text-align: center;
 `;
 const Right = styled.div`
 	flex: 1;
-	background-color: #905567;
+	/* background-color: #905567; */
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 1rem;
 `;
 
 const Navbar = () => {
@@ -67,7 +74,9 @@ const Navbar = () => {
 					<Language>EN</Language>
 					<SearchContainer>
 						<Input />
-						<IoSearchSharp style={{ fontSize: '1.5rem' }} />
+						<IoSearchSharp
+							style={{ fontSize: '1.5rem', color: 'gray' }}
+						/>
 					</SearchContainer>
 				</Left>
 				<Center>
@@ -88,5 +97,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-//23.11
