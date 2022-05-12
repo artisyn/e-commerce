@@ -34,7 +34,7 @@ const Wrapper = styled.div`
 	height: 100%;
 	display: flex;
 	transform: translateX(${(props) => props.slideIndex * -100}vw);
-	transition: transform ease-out 0.5s;
+	transition: transform ease-out 0.8s;
 `;
 const Slide = styled.div`
 	padding: 1rem;

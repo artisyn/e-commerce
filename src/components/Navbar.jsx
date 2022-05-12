@@ -29,6 +29,8 @@ const SearchContainer = styled.div`
 `;
 const Input = styled.input`
 	border: none;
+	outline: none;
+	font-size: 1.1rem;
 `;
 const Language = styled.span`
 	font-size: 1.2rem;
