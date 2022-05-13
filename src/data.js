@@ -79,7 +79,16 @@ export const popularProducts = [
 		id: 6,
 		img: 'https://www.pngall.com/wp-content/uploads/12/Garment-No-Background.png',
 	},
-	{ id: 7, img: '' },
-	{ id: 8, img: '' },
-	{ id: 9, img: '' },
+	{
+		id: 7,
+		img: 'https://www.pngall.com/wp-content/uploads/12/Garment-PNG-Photo.png',
+	},
+	{
+		id: 8,
+		img: 'https://www.pngall.com/wp-content/uploads/12/Garment-PNG-File.png',
+	},
+	{
+		id: 9,
+		img: 'https://www.pngall.com/wp-content/uploads/12/Fashion-Garment.png',
+	},
 ];
