@@ -2,15 +2,16 @@ import './App.scss';
 import Home from './pages/Home';
 import ProductList from './pages/ProductList';
 import Product from './pages/Product';
+import Register from './pages/Register';
 
 function App() {
 	return (
 		<div className="App">
-			<Product />
+			<Register />
 		</div>
 	);
 }
 
 export default App;
 
-//1.48
+//2 00
