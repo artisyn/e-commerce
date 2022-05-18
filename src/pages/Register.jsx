@@ -10,18 +10,22 @@ import { FiUser } from 'react-icons/fi';
 
 const Container = styled.div``;
 const Wrapper = styled.div`
-	min-height: 90vh;
-	padding: 3rem;
+	min-height: 100vh;
+	padding: 2rem;
+	background-image: url(https://images.unsplash.com/photo-1483985988355-763728e1935b?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470);
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
 `;
 const FormContainer = styled.div`
-	background-color: #efcfc388;
+	background-color: #e1d0c3e0;
 	margin: 0 auto;
-	border: 1px solid black;
 	max-width: 30rem;
 	padding: 3rem;
 `;
 const Title = styled.h1`
 	text-align: center;
+	margin: 0 0 1rem 0;
 `;
 const Form = styled.form`
 	display: flex;
@@ -31,7 +35,7 @@ const Form = styled.form`
 `;
 const Input = styled.input`
 	width: 100%;
-	height: 2.5rem;
+	height: 3rem;
 	padding-left: 2rem;
 `;
 const Button = styled.button`
@@ -54,9 +58,9 @@ const Button = styled.button`
 	}
 `;
 
-const Search = styled.div`
+const InputContainer = styled.div`
 	position: relative;
-	margin-bottom: 1rem;
+	margin-bottom: 1.5rem;
 	width: 100%;
 `;
 const Icon = styled.div`
@@ -99,6 +103,13 @@ const LoginContainer = styled.div`
 	align-items: center;
 	justify-content: center;
 `;
+const MessageForUser = styled.div`
+	position: absolute;
+
+	color: red;
+	letter-spacing: 0.05rem;
+	bottom: -1rem;
+`;
 
 const Register = () => {
 	return (
@@ -116,31 +127,38 @@ const Register = () => {
 							</SeparatorText>
 							<MiddleLine />
 						</Separator>
-						<Search>
+						<InputContainer>
 							<Icon>
 								<FiUser />
 							</Icon>
 							<Input placeholder="Name" />
-						</Search>
+							<MessageForUser></MessageForUser>
+						</InputContainer>
 
-						<Search>
+						<InputContainer>
 							<Icon>
 								<FiLock />
 							</Icon>
 							<Input placeholder="Password" />
-						</Search>
-						<Search>
+							<MessageForUser></MessageForUser>
+						</InputContainer>
+
+						<InputContainer>
 							<Icon>
 								<FiLock />
 							</Icon>
 							<Input placeholder="Repeat Password" />
-						</Search>
-						<Search>
+							<MessageForUser></MessageForUser>
+						</InputContainer>
+
+						<InputContainer>
 							<Icon>
 								<FiMail />
 							</Icon>
 							<Input placeholder="Email" />
-						</Search>
+							<MessageForUser></MessageForUser>
+						</InputContainer>
+
 						<Agreement>
 							By clicking <ImportantText>Register</ImportantText>,
 							you confirm that you are agreeing to our Terms and
@@ -158,7 +176,7 @@ const Register = () => {
 					</Separator>
 
 					<LoginContainer>
-						<Button>Login</Button>
+						<Button>Sign In</Button>
 					</LoginContainer>
 				</FormContainer>
 			</Wrapper>
