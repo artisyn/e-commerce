@@ -1,4 +1,5 @@
 @import '../src/styles/variables.scss';
 .App {
 	font-family: $urbanist;
+	overflow-x: hidden;
 }

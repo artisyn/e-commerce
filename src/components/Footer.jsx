@@ -6,11 +6,17 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
+import { desktop, tablet, tabletMin } from '../styles/responsive';
 
 const Container = styled.div`
-	height: 22rem;
+	min-height: 22rem;
 	padding: 1rem;
 	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	/* ${tablet({
+		flexDirection: 'column',
+	})} */
 `;
 const Left = styled.div`
 	padding: 1rem;
@@ -20,6 +26,10 @@ const Left = styled.div`
 	align-items: center;
 	justify-content: center;
 	gap: 1.5rem;
+	min-width: 21rem;
+	flex-grow: 1;
+	flex-shrink: 1;
+	flex-basis: min-content;
 `;
 const Logo = styled.h1`
 	width: 100%;
@@ -27,6 +37,7 @@ const Logo = styled.h1`
 	margin: 0;
 	letter-spacing: 0.1rem;
 	text-align: left;
+	${tablet({ textAlign: 'center' })}
 `;
 const Description = styled.p`
 	font-size: 1.2rem;
@@ -53,15 +64,19 @@ const SocialIcon = styled.div`
 const Center = styled.div`
 	padding: 1rem;
 	flex: 1;
+	min-width: 21rem;
+	flex-grow: 1;
+	flex-shrink: 1;
+	flex-basis: min-content;
 `;
 
 const Title = styled.h3`
 	margin: 0;
 	font-size: 2rem;
 	margin-bottom: 1.5rem;
+	${tablet({ textAlign: 'center' })}
 `;
 const List = styled.ul`
-	/* border: 1px solid black; */
 	list-style: none;
 	font-size: 1.3rem;
 	font-style: italic;
@@ -69,6 +84,7 @@ const List = styled.ul`
 	margin: 0;
 	display: flex;
 	flex-wrap: wrap;
+	${tablet({ flexDirection: 'column', alignItems: 'center' })}
 `;
 const ListItem = styled.li`
 	width: 50%;
@@ -76,10 +92,18 @@ const ListItem = styled.li`
 	&:hover {
 		color: gray;
 	}
+	${tablet({ width: 'auto' })}
 `;
 const Right = styled.div`
+	border: 1px solid black;
 	padding: 1rem;
 	flex: 1;
+	min-width: 21rem;
+	flex-grow: 1;
+	flex-shrink: 1;
+	flex-basis: min-content;
+
+	/* ${desktop({ maxWidth: '40rem' })} */
 `;
 const ContactItem = styled.div`
 	display: flex;

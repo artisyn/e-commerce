@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
+import { tablet } from '../styles/responsive';
 
 const Container = styled.div`
 	height: 60vh;
@@ -10,6 +11,7 @@ const Container = styled.div`
 	justify-content: center;
 	gap: 1rem;
 	background-color: #fff3f3;
+	padding: 1rem;
 `;
 const Title = styled.h1`
 	font-size: 3.5rem;
@@ -17,6 +19,7 @@ const Title = styled.h1`
 `;
 const Description = styled.div`
 	font-size: 1.7rem;
+	text-align: center;
 `;
 const InputContainer = styled.div`
 	display: flex;
@@ -24,6 +27,8 @@ const InputContainer = styled.div`
 	justify-content: center;
 	gap: 0.5rem;
 	width: 40%;
+
+	${tablet({ width: '90%' })}
 `;
 const Input = styled.input`
 	flex: 8;

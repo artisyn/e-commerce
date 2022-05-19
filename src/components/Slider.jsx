@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { tablet } from '../styles/responsive';
 import { sliderItems } from '../data';
 import ArrowBackIosOutlinedIcon from '@mui/icons-material/ArrowBackIosOutlined';
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
@@ -10,6 +11,7 @@ const Container = styled.div`
 	display: flex;
 	position: relative;
 	overflow: hidden;
+	${tablet({ display: 'none' })}
 `;
 const Arrow = styled.div`
 	width: 3rem;
@@ -47,9 +49,7 @@ const Slide = styled.div`
 const ImageContainer = styled.div`
 	flex: 1;
 	height: 100%;
-	/* border: 1px solid black; */
 	display: flex;
-	//align-items: center;
 	justify-content: center;
 `;
 

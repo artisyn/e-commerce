@@ -2,13 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
-	height: 2.5rem;
+	min-height: 2.5rem;
 	background-color: teal;
 	color: white;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	font-size: 1.1rem;
+	font-size: 1.3rem;
+	flex-wrap: wrap;
+	padding: 1rem;
+	letter-spacing: 0.08rem;
 `;
 const Space = styled.span`
 	margin: 0.5rem;

@@ -1,13 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
+import { tablet } from '../styles/responsive';
 
 const Container = styled.div`
+	border: 2px solid black;
 	position: relative;
 	flex: 1;
 	height: 70vh;
+	max-width: 32rem;
+	min-width: 20rem;
+	min-height: 30rem;
 	background: url(${(props) => props.background}) center center no-repeat;
 	background-size: 35rem;
 	transition: background ease-out 1s;
+	${tablet({ height: '10rem' })}
 
 	&:hover {
 		background-size: 40rem;
