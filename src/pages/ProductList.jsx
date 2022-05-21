@@ -5,6 +5,9 @@ import Announcement from '../components/Announcement';
 import Products from '../components/Products';
 import Newsletter from '../components/Newsletter';
 import Footer from '../components/Footer';
+import { mobile } from '../styles/responsive';
+import { IoOptions } from 'react-icons/io5';
+import { BiSort } from 'react-icons/bi';
 
 const Container = styled.div``;
 const FilterContainer = styled.div`
@@ -20,16 +23,36 @@ const Filter = styled.div`
 	align-items: center;
 	gap: 0.5rem;
 	z-index: 10;
+	${mobile({
+		gap: '0.2rem',
+	})}
 `;
 const FilterText = styled.span`
 	font-size: 1.2rem;
 	font-weight: 600;
+`;
+const Text = styled.span`
+	${mobile({
+		display: 'none',
+	})}
 `;
 const Select = styled.select`
 	height: 2rem;
 	padding: 0.5rem;
 `;
 const Option = styled.option``;
+
+// mobile
+
+const Icon = styled.span`
+	font-size: 1.5rem;
+	display: none;
+	${mobile({
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+	})}
+`;
 
 const ProductList = () => {
 	return (
@@ -39,7 +62,13 @@ const ProductList = () => {
 			<Title>Dresses</Title>
 			<FilterContainer>
 				<Filter>
-					<FilterText>Filter Products</FilterText>
+					<FilterText>
+						<Text>Filter Products</Text>
+
+						<Icon>
+							<IoOptions />
+						</Icon>
+					</FilterText>
 					<Select defaultValue={'color'}>
 						<Option value={'color'} disabled>
 							Color
@@ -66,7 +95,13 @@ const ProductList = () => {
 					</Select>
 				</Filter>
 				<Filter>
-					<FilterText>Sort Products</FilterText>
+					<FilterText>
+						<Text>Sort Products</Text>
+
+						<Icon>
+							<BiSort />
+						</Icon>
+					</FilterText>
 					<Select defaultValue={'sort by'}>
 						<Option value={'sort by'} disabled>
 							Sort By

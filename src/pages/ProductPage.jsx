@@ -6,6 +6,7 @@ import Newsletter from '../components/Newsletter';
 import Footer from '../components/Footer';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
+import { mobile, productCustom, tablet } from '../styles/responsive';
 
 const Container = styled.div``;
 
@@ -13,6 +14,12 @@ const Wrapper = styled.div`
 	display: flex;
 	padding: 3rem;
 	gap: 2rem;
+	${productCustom({
+		flexDirection: 'column',
+	})}
+	${mobile({
+		padding: '.5rem',
+	})}
 `;
 const Left = styled.div`
 	display: flex;
@@ -35,6 +42,9 @@ const Image = styled.img`
 	height: 90vh;
 	width: 100%;
 	object-fit: cover;
+	${tablet({
+		height: '50vh',
+	})}
 `;
 
 const Title = styled.h1`
@@ -86,6 +96,7 @@ const FilterSizeOption = styled.option`
 const PurchaseContainer = styled.div`
 	display: flex;
 	justify-content: left;
+	flex-wrap: wrap;
 	width: 100%;
 	gap: 2rem;
 `;
@@ -123,9 +134,14 @@ const Button = styled.button`
 	&:hover {
 		background-color: black;
 	}
+
+	${mobile({
+		fontSize: '1.2rem',
+		padding: '1rem 1.5rem',
+	})}
 `;
 
-const Product = () => {
+const ProductPage = () => {
 	return (
 		<Container>
 			<Navbar />
@@ -185,4 +201,4 @@ const Product = () => {
 	);
 };
 
-export default Product;
+export default ProductPage;

@@ -11,6 +11,8 @@ import { FaCcMastercard } from 'react-icons/fa';
 import { FaCcPaypal } from 'react-icons/fa';
 import { AiOutlinePlusSquare } from 'react-icons/ai';
 import { AiOutlineMinusSquare } from 'react-icons/ai';
+import { desktop, tablet, mobile } from '../styles/responsive';
+import { grid } from '@mui/system';
 
 const Container = styled.div``;
 const Wrapper = styled.div`
@@ -18,6 +20,12 @@ const Wrapper = styled.div`
 	padding: 2rem;
 	display: flex;
 	gap: 1rem;
+	${desktop({
+		flexDirection: 'column',
+	})}
+	${tablet({
+		padding: '0',
+	})}
 `;
 const Left = styled.div`
 	border: 1px solid black;
@@ -43,11 +51,21 @@ const CartItem = styled.div`
 	padding: 1rem;
 	display: flex;
 	gap: 1rem;
+	${mobile({
+		maxHeight: 'fit-content',
+		display: 'grid',
+		gridTemplateRows: '1fr 1fr',
+	})}
 `;
 
 const ImageContainer = styled.div`
+	background-color: #0b0b0b11;
+	overflow: hidden;
 	padding: 1rem;
 	flex: 1;
+	${mobile({
+		maxHeight: '20rem',
+	})}
 `;
 
 const Image = styled.img`

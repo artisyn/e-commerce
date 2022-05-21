@@ -2,7 +2,7 @@ import { css } from 'styled-components';
 
 export const mobile = (props) => {
 	return css`
-		@media only screen and (max-width: 380px) {
+		@media only screen and (max-width: 500px) {
 			${props}
 		}
 	`;
@@ -25,6 +25,13 @@ export const tabletMin = (props) => {
 export const desktop = (props) => {
 	return css`
 		@media only screen and (max-width: 1200px) {
+			${props}
+		}
+	`;
+};
+export const productCustom = (props) => {
+	return css`
+		@media only screen and (max-width: 920px) {
 			${props}
 		}
 	`;

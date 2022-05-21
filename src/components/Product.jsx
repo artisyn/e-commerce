@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
@@ -42,7 +41,7 @@ const Circle = styled.div`
 	position: absolute;
 `;
 const Image = styled.img`
-	height: 75%;
+	height: 90%;
 	width: 90%;
 	z-index: 2;
 
@@ -68,7 +67,7 @@ const Icon = styled.div`
 const Product = ({ product }) => {
 	return (
 		<Container>
-			<Circle />
+			{/* <Circle /> */}
 			<Image src={product.img} />
 			<Info>
 				<Icon>

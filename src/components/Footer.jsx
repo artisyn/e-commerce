@@ -6,30 +6,42 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
-import { desktop, tablet, tabletMin } from '../styles/responsive';
+import { desktop, tablet, tabletMin, mobile } from '../styles/responsive';
 
 const Container = styled.div`
 	min-height: 22rem;
 	padding: 1rem;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	/* ${tablet({
-		flexDirection: 'column',
-	})} */
+	display: grid;
+	gap: 1rem;
+	justify-items: center;
+	grid-template-columns: 1fr 1fr 1fr;
+	${desktop({
+		display: 'flex',
+		flexWrap: 'wrap',
+		justifyContent: 'center',
+	})}
+	${tablet({
+		gridTemplateColumns: 'auto',
+		gridTemplateRows: '1fr 1fr 1fr',
+	})}
 `;
 const Left = styled.div`
+	/* border: 1px solid black; */
 	padding: 1rem;
-	flex: 1;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 	gap: 1.5rem;
-	min-width: 21rem;
-	flex-grow: 1;
-	flex-shrink: 1;
-	flex-basis: min-content;
+	${desktop({
+		flex: 1,
+		minWidth: '30rem',
+		maxWidth: '32rem',
+		minHeight: '22rem',
+	})}
+	${mobile({
+		minWidth: '20rem',
+	})}
 `;
 const Logo = styled.h1`
 	width: 100%;
@@ -40,7 +52,7 @@ const Logo = styled.h1`
 	${tablet({ textAlign: 'center' })}
 `;
 const Description = styled.p`
-	font-size: 1.2rem;
+	font-size: 1.3rem;
 	line-height: 1.5rem;
 `;
 const SocialContainer = styled.div`
@@ -63,11 +75,16 @@ const SocialIcon = styled.div`
 `;
 const Center = styled.div`
 	padding: 1rem;
-	flex: 1;
-	min-width: 21rem;
-	flex-grow: 1;
-	flex-shrink: 1;
-	flex-basis: min-content;
+	/* border: 1px solid black; */
+	${desktop({
+		flex: 1,
+		minWidth: '30rem',
+		maxWidth: '32rem',
+		minHeight: '22rem',
+	})}
+	${mobile({
+		minWidth: '20rem',
+	})}
 `;
 
 const Title = styled.h3`
@@ -79,7 +96,7 @@ const Title = styled.h3`
 const List = styled.ul`
 	list-style: none;
 	font-size: 1.3rem;
-	font-style: italic;
+
 	padding: 0;
 	margin: 0;
 	display: flex;
@@ -88,6 +105,7 @@ const List = styled.ul`
 `;
 const ListItem = styled.li`
 	width: 50%;
+	margin-bottom: 0.2rem;
 	cursor: pointer;
 	&:hover {
 		color: gray;
@@ -95,15 +113,17 @@ const ListItem = styled.li`
 	${tablet({ width: 'auto' })}
 `;
 const Right = styled.div`
-	border: 1px solid black;
+	/* border: 1px solid black; */
 	padding: 1rem;
-	flex: 1;
-	min-width: 21rem;
-	flex-grow: 1;
-	flex-shrink: 1;
-	flex-basis: min-content;
-
-	/* ${desktop({ maxWidth: '40rem' })} */
+	${desktop({
+		flex: 1,
+		minWidth: '30rem',
+		maxWidth: '32rem',
+		minHeight: '22rem',
+	})}
+	${mobile({
+		minWidth: '20rem',
+	})}
 `;
 const ContactItem = styled.div`
 	display: flex;
@@ -129,7 +149,7 @@ const Footer = () => {
 					Lorem, ipsum dolor sit amet consectetur adipisicing elit.
 					Ipsa, culpa voluptatum quia officiis numquam voluptatem.
 					Odit eligendi neque, iste quia ratione corporis nam saepe
-					dolorem soluta sequi minus pariatur officiis
+					dolorem.
 				</Description>
 				<SocialContainer>
 					<SocialIcon color="#003c95b2">
