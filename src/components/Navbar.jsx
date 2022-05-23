@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { mobile, tablet, tabletMin } from '../styles/responsive';
 import { IoSearchSharp } from 'react-icons/io5';
 import { MdArrowForwardIos } from 'react-icons/md';
@@ -7,6 +8,10 @@ import Badge from '@mui/material/Badge';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 
+const StyledLink = styled(Link)`
+	text-decoration: none;
+	color: black;
+`;
 const Container = styled.div`
 	position: relative;
 	border: 1px solid black;
@@ -58,12 +63,12 @@ const Logo = styled.h1`
 `;
 
 const MenuItem = styled.div`
-	font-size: 1rem;
+	font-size: 1.2rem;
+	font-weight: 500;
 	cursor: pointer;
 	${tablet({ display: 'none' })}
 `;
 const MenuCart = styled.div`
-	font-size: 1rem;
 	cursor: pointer;
 `;
 
@@ -219,16 +224,27 @@ const Navbar = () => {
 					</SearchIcon>
 				</Left>
 				<Center>
-					<Logo>Logo.</Logo>
+					<StyledLink to={'/Home'}>
+						<Logo>Logo.</Logo>
+					</StyledLink>
 				</Center>
 				<Right>
-					<MenuItem>Register</MenuItem>
-					<MenuItem>Sign In</MenuItem>
-					<MenuCart>
-						<Badge badgeContent={4} color="primary">
-							<ShoppingCartOutlinedIcon color="action" />
-						</Badge>
-					</MenuCart>
+					<StyledLink to={'/Register'}>
+						<MenuItem>Register</MenuItem>
+					</StyledLink>
+					<StyledLink to={'/Login'}>
+						<MenuItem>Sign In</MenuItem>
+					</StyledLink>
+					<StyledLink to={'/Cart'}>
+						<MenuCart>
+							<Badge badgeContent={4} color="primary">
+								<ShoppingCartOutlinedIcon
+									style={{ fontSize: '1.6rem' }}
+									color="action"
+								/>
+							</Badge>
+						</MenuCart>
+					</StyledLink>
 				</Right>
 			</Wrapper>
 
