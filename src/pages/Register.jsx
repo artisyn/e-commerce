@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { EcommerceContext } from '../context/context';
 import Navbar from '../components/Navbar';
 import Announcement from '../components/Announcement';
 import Newsletter from '../components/Newsletter';
@@ -7,6 +9,8 @@ import Footer from '../components/Footer';
 import { FiLock } from 'react-icons/fi';
 import { FiMail } from 'react-icons/fi';
 import { FiUser } from 'react-icons/fi';
+import { AiOutlineEyeInvisible } from 'react-icons/ai';
+import { AiOutlineEye } from 'react-icons/ai';
 
 const Container = styled.div``;
 const Wrapper = styled.div`
@@ -37,6 +41,7 @@ const Input = styled.input`
 	width: 100%;
 	height: 3rem;
 	padding-left: 2rem;
+	font-size: 1.3rem;
 `;
 const Button = styled.button`
 	height: 3rem;
@@ -72,6 +77,17 @@ const Icon = styled.div`
 	font-size: 1.3rem;
 	padding-left: 0.3rem;
 `;
+const PasswordIcon = styled.div`
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	font-size: 1.3rem;
+	padding-right: 0.3rem;
+	right: 0;
+	cursor: pointer;
+`;
 const Agreement = styled.div`
 	margin-bottom: 1rem;
 `;
@@ -106,12 +122,137 @@ const LoginContainer = styled.div`
 const MessageForUser = styled.div`
 	position: absolute;
 
-	color: red;
+	color: #8e0404;
 	letter-spacing: 0.05rem;
-	bottom: -1rem;
+	bottom: -1.3rem;
+`;
+const StyledLink = styled(Link)`
+	text-decoration: none;
 `;
 
 const Register = () => {
+	const { users, setUsers } = useContext(EcommerceContext);
+	const [name, setName] = useState('');
+	const [password, setPassword] = useState('');
+	const [repeatPassword, setRepeatPassword] = useState('');
+	const [email, setEmail] = useState('');
+	const [visiblePassword, setVisiblePassword] = useState(false);
+	//Message States
+	const [nameMessage, setNameMessage] = useState('');
+	const [passwordMessage, setPasswordMessage] = useState('');
+	const [repeatPasswordMessage, setRepeatPasswordMessage] = useState('');
+	const [emailMessage, setEmailMessage] = useState('');
+
+	// Messages for wrong inputs
+	const noName = 'Please Enter Your Name';
+	const noPassword = 'Please Enter Password';
+	const shortPassword = 'Password should be at least 8 characters';
+	const noNumPassword = 'Password should contain at least 1 number';
+	const notEqualPasswords = 'Passwords do not match';
+	const noEmail = 'Please Enter Your Email';
+	const wrongEmail = 'Please Enter a valid Email';
+	const emailInUse = 'Email Is Already In Use';
+
+	const HandleNameChange = (e) => {
+		setName(e.target.value);
+	};
+	const HandlePasswordChange = (e) => {
+		if (e.nativeEvent.data === ' ') return;
+		setPassword(e.target.value);
+	};
+	const HandleRepeatPassword = (e) => {
+		if (e.nativeEvent.data === ' ') return;
+
+		setRepeatPassword(e.target.value);
+	};
+	const HandleEmailChange = (e) => {
+		setEmail(e.target.value);
+	};
+	const CheckUser = (email) => {
+		let userExists = false;
+
+		users.forEach((user) => {
+			if (user.email === email) userExists = true;
+		});
+
+		return userExists;
+	};
+	const HandleRegister = (e) => {
+		e.preventDefault();
+		if (name === '') {
+			setNameMessage(noName);
+			return;
+		}
+		setNameMessage('');
+
+		if (password.length === 0) {
+			setPasswordMessage(noPassword);
+			return;
+		}
+		setPasswordMessage('');
+		if (password.length < 8) {
+			setPasswordMessage(shortPassword);
+			return;
+		}
+		setPasswordMessage('');
+
+		if (/[0-9]/.test(password) == false) {
+			setPasswordMessage(noNumPassword);
+			return;
+		}
+		setPasswordMessage('');
+
+		if (password !== repeatPassword) {
+			setRepeatPasswordMessage(notEqualPasswords);
+			return;
+		}
+		setRepeatPasswordMessage('');
+
+		if (repeatPassword.length === 0) {
+			setRepeatPasswordMessage(noPassword);
+			return;
+		}
+		setRepeatPasswordMessage('');
+
+		if (repeatPassword.length < 8) {
+			setRepeatPasswordMessage(shortPassword);
+			return;
+		}
+		setRepeatPasswordMessage('');
+
+		if (email.length === 0) {
+			setEmailMessage(noEmail);
+			return;
+		}
+		setEmailMessage('');
+		if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+			setEmailMessage(wrongEmail);
+			return;
+		}
+		setEmailMessage('');
+
+		if (CheckUser(email)) {
+			setEmailMessage(emailInUse);
+			return;
+		}
+		setUsers([
+			...users,
+			{
+				name: `${name}`,
+				password: `${password}`,
+				email: `${email}`,
+			},
+		]);
+
+		console.log(users);
+	};
+	const HandleSignIn = (e) => {
+		e.preventDefault();
+	};
+	const HandleVisiblePassword = () => {
+		setVisiblePassword(!visiblePassword);
+	};
+
 	return (
 		<Container>
 			<Navbar />
@@ -131,32 +272,68 @@ const Register = () => {
 							<Icon>
 								<FiUser />
 							</Icon>
-							<Input placeholder="Name" />
-							<MessageForUser></MessageForUser>
+							<Input
+								maxLength={26}
+								placeholder="Name"
+								value={name}
+								onChange={HandleNameChange}
+							/>
+
+							<MessageForUser>{nameMessage}</MessageForUser>
 						</InputContainer>
 
 						<InputContainer>
 							<Icon>
 								<FiLock />
 							</Icon>
-							<Input placeholder="Password" />
-							<MessageForUser></MessageForUser>
+							<Input
+								type={visiblePassword ? 'text' : 'password'}
+								placeholder="Password"
+								value={password}
+								onChange={HandlePasswordChange}
+							/>
+							<PasswordIcon onClick={HandleVisiblePassword}>
+								{visiblePassword ? (
+									<AiOutlineEye />
+								) : (
+									<AiOutlineEyeInvisible />
+								)}
+							</PasswordIcon>
+							<MessageForUser>{passwordMessage}</MessageForUser>
 						</InputContainer>
 
 						<InputContainer>
 							<Icon>
 								<FiLock />
 							</Icon>
-							<Input placeholder="Repeat Password" />
-							<MessageForUser></MessageForUser>
+							<Input
+								type={visiblePassword ? 'text' : 'password'}
+								placeholder="Repeat Password"
+								value={repeatPassword}
+								onChange={HandleRepeatPassword}
+							/>
+							<PasswordIcon onClick={HandleVisiblePassword}>
+								{visiblePassword ? (
+									<AiOutlineEye />
+								) : (
+									<AiOutlineEyeInvisible />
+								)}
+							</PasswordIcon>
+							<MessageForUser>
+								{repeatPasswordMessage}
+							</MessageForUser>
 						</InputContainer>
 
 						<InputContainer>
 							<Icon>
 								<FiMail />
 							</Icon>
-							<Input placeholder="Email" />
-							<MessageForUser></MessageForUser>
+							<Input
+								placeholder="Email"
+								value={email}
+								onChange={HandleEmailChange}
+							/>
+							<MessageForUser>{emailMessage}</MessageForUser>
 						</InputContainer>
 
 						<Agreement>
@@ -165,7 +342,7 @@ const Register = () => {
 							Conditions.
 						</Agreement>
 
-						<Button>Register</Button>
+						<Button onClick={HandleRegister}>Register</Button>
 					</Form>
 					<Separator>
 						<MiddleLine />
@@ -176,7 +353,9 @@ const Register = () => {
 					</Separator>
 
 					<LoginContainer>
-						<Button>Sign In</Button>
+						<StyledLink to={'/Login'}>
+							<Button>Sign In</Button>
+						</StyledLink>
 					</LoginContainer>
 				</FormContainer>
 			</Wrapper>

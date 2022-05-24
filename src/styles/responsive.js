@@ -36,3 +36,10 @@ export const productCustom = (props) => {
 		}
 	`;
 };
+export const userCustom = (props) => {
+	return css`
+		@media only screen and (max-width: 600px) {
+			${props}
+		}
+	`;
+};
