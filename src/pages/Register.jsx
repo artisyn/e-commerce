@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { EcommerceContext } from '../context/context';
@@ -43,6 +44,7 @@ const Input = styled.input`
 	padding-left: 2rem;
 	font-size: 1.3rem;
 `;
+
 const Button = styled.button`
 	height: 3rem;
 	width: 10rem;
@@ -65,7 +67,6 @@ const Button = styled.button`
 
 const InputContainer = styled.div`
 	position: relative;
-	margin-bottom: 1.5rem;
 	width: 100%;
 `;
 const Icon = styled.div`
@@ -120,18 +121,19 @@ const LoginContainer = styled.div`
 	justify-content: center;
 `;
 const MessageForUser = styled.div`
-	position: absolute;
-
+	min-height: 1.5rem;
 	color: #8e0404;
 	letter-spacing: 0.05rem;
-	bottom: -1.3rem;
+	width: 100%;
 `;
 const StyledLink = styled(Link)`
 	text-decoration: none;
 `;
 
 const Register = () => {
-	const { users, setUsers } = useContext(EcommerceContext);
+	const { users, setUsers, isAuth, setIsAuth, loggedUser, setLoggedUser } =
+		useContext(EcommerceContext);
+	const navigate = useNavigate();
 	const [name, setName] = useState('');
 	const [password, setPassword] = useState('');
 	const [repeatPassword, setRepeatPassword] = useState('');
@@ -176,6 +178,11 @@ const Register = () => {
 		});
 
 		return userExists;
+	};
+	const ClearFields = () => {
+		setName('');
+		setPassword('');
+		setEmail('');
 	};
 	const HandleRegister = (e) => {
 		e.preventDefault();
@@ -235,16 +242,16 @@ const Register = () => {
 			setEmailMessage(emailInUse);
 			return;
 		}
-		setUsers([
-			...users,
-			{
-				name: `${name}`,
-				password: `${password}`,
-				email: `${email}`,
-			},
-		]);
-
-		console.log(users);
+		const user = {
+			name: `${name}`,
+			password: `${password}`,
+			email: `${email}`,
+		};
+		setUsers([...users, user]);
+		ClearFields();
+		setIsAuth(true);
+		setLoggedUser(user);
+		navigate('/user');
 	};
 	const HandleSignIn = (e) => {
 		e.preventDefault();
@@ -268,6 +275,7 @@ const Register = () => {
 							</SeparatorText>
 							<MiddleLine />
 						</Separator>
+
 						<InputContainer>
 							<Icon>
 								<FiUser />
@@ -278,9 +286,8 @@ const Register = () => {
 								value={name}
 								onChange={HandleNameChange}
 							/>
-
-							<MessageForUser>{nameMessage}</MessageForUser>
 						</InputContainer>
+						<MessageForUser>{nameMessage}</MessageForUser>
 
 						<InputContainer>
 							<Icon>
@@ -299,8 +306,8 @@ const Register = () => {
 									<AiOutlineEyeInvisible />
 								)}
 							</PasswordIcon>
-							<MessageForUser>{passwordMessage}</MessageForUser>
 						</InputContainer>
+						<MessageForUser>{passwordMessage}</MessageForUser>
 
 						<InputContainer>
 							<Icon>
@@ -319,10 +326,8 @@ const Register = () => {
 									<AiOutlineEyeInvisible />
 								)}
 							</PasswordIcon>
-							<MessageForUser>
-								{repeatPasswordMessage}
-							</MessageForUser>
 						</InputContainer>
+						<MessageForUser>{repeatPasswordMessage}</MessageForUser>
 
 						<InputContainer>
 							<Icon>
@@ -333,8 +338,8 @@ const Register = () => {
 								value={email}
 								onChange={HandleEmailChange}
 							/>
-							<MessageForUser>{emailMessage}</MessageForUser>
 						</InputContainer>
+						<MessageForUser>{emailMessage}</MessageForUser>
 
 						<Agreement>
 							By clicking <ImportantText>Register</ImportantText>,

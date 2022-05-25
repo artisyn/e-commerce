@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { EcommerceContext } from '../context/context';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { mobile, tablet, tabletMin } from '../styles/responsive';
@@ -7,6 +8,7 @@ import { MdArrowForwardIos } from 'react-icons/md';
 import Badge from '@mui/material/Badge';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
+import { FaRegUser } from 'react-icons/fa';
 
 const StyledLink = styled(Link)`
 	text-decoration: none;
@@ -187,6 +189,7 @@ const SectionCategory = styled.span`
 `;
 
 const Navbar = () => {
+	const { isAuth } = useContext(EcommerceContext);
 	const [mobSearch, setMobSearch] = useState(false);
 	const [menu, setMenu] = useState(false);
 
@@ -229,12 +232,24 @@ const Navbar = () => {
 					</StyledLink>
 				</Center>
 				<Right>
-					<StyledLink to={'/Register'}>
-						<MenuItem>Register</MenuItem>
-					</StyledLink>
-					<StyledLink to={'/Login'}>
-						<MenuItem>Sign In</MenuItem>
-					</StyledLink>
+					{isAuth ? (
+						''
+					) : (
+						<StyledLink to={'/Register'}>
+							<MenuItem>Register</MenuItem>
+						</StyledLink>
+					)}
+
+					{isAuth ? (
+						<StyledLink to={'/User'}>
+							<FaRegUser style={{ fontSize: '1.5rem' }} />
+						</StyledLink>
+					) : (
+						<StyledLink to={'/Login'}>
+							<MenuItem>Sign In</MenuItem>
+						</StyledLink>
+					)}
+
 					<StyledLink to={'/Cart'}>
 						<MenuCart>
 							<Badge badgeContent={4} color="primary">

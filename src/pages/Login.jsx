@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
+import { EcommerceContext } from '../context/context';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Announcement from '../components/Announcement';
 import Newsletter from '../components/Newsletter';
@@ -7,6 +9,8 @@ import Footer from '../components/Footer';
 import { FiLock } from 'react-icons/fi';
 import { FiMail } from 'react-icons/fi';
 import { FiUser } from 'react-icons/fi';
+import { AiOutlineEyeInvisible } from 'react-icons/ai';
+import { AiOutlineEye } from 'react-icons/ai';
 
 const Container = styled.div``;
 const Wrapper = styled.div`
@@ -33,10 +37,12 @@ const Form = styled.form`
 	align-items: center;
 	justify-content: center;
 `;
+
 const Input = styled.input`
 	width: 100%;
 	height: 3rem;
 	padding-left: 2rem;
+	font-size: 1.2rem;
 `;
 const Button = styled.button`
 	height: 3rem;
@@ -61,7 +67,6 @@ const Button = styled.button`
 
 const InputContainer = styled.div`
 	position: relative;
-	margin-bottom: 1.5rem;
 	width: 100%;
 `;
 const Icon = styled.div`
@@ -73,21 +78,30 @@ const Icon = styled.div`
 	font-size: 1.3rem;
 	padding-left: 0.3rem;
 `;
-const LoginContainer = styled.div`
+const PasswordIcon = styled.div`
+	position: absolute;
+	top: 0;
+	bottom: 0;
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	font-size: 1.3rem;
+	padding-right: 0.3rem;
+	right: 0;
+	cursor: pointer;
 `;
-const MessageForUser = styled.div`
-	position: absolute;
 
-	color: red;
+const MessageForUser = styled.div`
+	min-height: 1.5rem;
+	color: #8e0404;
 	letter-spacing: 0.05rem;
-	bottom: -1rem;
+	width: 100%;
 `;
 const ForgotPasswordContainer = styled.div`
 	font-size: 1.2rem;
 	margin-bottom: 1rem;
+`;
+const Text = styled.span`
+	margin-right: 0.5rem;
 `;
 const PasswordLink = styled.span`
 	transition: color ease 0.3s;
@@ -101,6 +115,67 @@ const PasswordLink = styled.span`
 const RemindPassword = styled.div``;
 
 const Login = () => {
+	const { users, isAuth, setIsAuth, loggedUser, setLoggedUser } =
+		useContext(EcommerceContext);
+	const navigate = useNavigate();
+	const [remindShown, setRemindShown] = useState(false);
+	const [visiblePassword, setVisiblePassword] = useState(false);
+	const [name, setName] = useState('');
+	const [password, setPassword] = useState('');
+
+	const [nameMessage, setNameMessage] = useState('');
+	const [passwordMessage, setPasswordMessage] = useState('');
+	const [emailMessage, setEmailMessage] = useState('');
+
+	const HandleNameChange = (e) => {
+		setName(e.target.value);
+	};
+	const HandlePasswordChange = (e) => {
+		setPassword(e.target.value);
+	};
+
+	const HandleShowRemind = () => {
+		setRemindShown(true);
+	};
+	const HandleVisiblePassword = () => {
+		setVisiblePassword(!visiblePassword);
+	};
+	const HandleSignIn = (e) => {
+		e.preventDefault();
+		if (name === '') {
+			setNameMessage('Please Enter Your Email');
+			return;
+		}
+		setNameMessage('');
+		if (password === '') {
+			setPasswordMessage('Please Enter Your Password');
+			return;
+		}
+		setPasswordMessage('');
+		const user = users.find((el) => el.email === name);
+		console.log(user);
+
+		if (!user) {
+			setNameMessage('Email or Password is incorrect');
+			return;
+		}
+		setNameMessage('');
+		if (user?.password !== password) {
+			setNameMessage('Password is incorrect');
+			return;
+		}
+		setPasswordMessage('');
+
+		if (user.password === password) {
+			setIsAuth(true);
+			setLoggedUser(user);
+			navigate('/user');
+		}
+	};
+	const HandleRemind = (e) => {
+		e.preventDefault();
+		setEmailMessage("We've sent you a recovery Link");
+	};
 	return (
 		<Container>
 			<Navbar />
@@ -113,37 +188,60 @@ const Login = () => {
 							<Icon>
 								<FiUser />
 							</Icon>
-							<Input placeholder="Name" />
-							<MessageForUser></MessageForUser>
+							<Input
+								placeholder="Email"
+								value={name}
+								onChange={HandleNameChange}
+							/>
 						</InputContainer>
+						<MessageForUser>{nameMessage}</MessageForUser>
 
 						<InputContainer>
 							<Icon>
 								<FiLock />
 							</Icon>
-							<Input placeholder="Password" />
-							<MessageForUser></MessageForUser>
+							<Input
+								value={password}
+								placeholder="Password"
+								type={visiblePassword ? 'text' : 'password'}
+								onChange={HandlePasswordChange}
+							/>
+							<PasswordIcon onClick={HandleVisiblePassword}>
+								{visiblePassword ? (
+									<AiOutlineEye />
+								) : (
+									<AiOutlineEyeInvisible />
+								)}
+							</PasswordIcon>
 						</InputContainer>
+						<MessageForUser>{passwordMessage}</MessageForUser>
 
-						<Button>Sign In</Button>
+						<Button onClick={HandleSignIn}>Sign In</Button>
 
 						<ForgotPasswordContainer>
-							Forgot your password?
-							<PasswordLink> Remind me </PasswordLink>
+							<Text>Forgot your password?</Text>
+							<PasswordLink onClick={HandleShowRemind}>
+								Remind me
+							</PasswordLink>
 						</ForgotPasswordContainer>
 					</Form>
-					<RemindPassword>
-						<Form>
-							<InputContainer>
-								<Icon>
-									<FiMail />
-								</Icon>
-								<Input placeholder="Email" />
-								<MessageForUser></MessageForUser>
-							</InputContainer>
-							<Button>Remind</Button>
-						</Form>
-					</RemindPassword>
+					{remindShown ? (
+						<RemindPassword>
+							<Form>
+								<InputContainer>
+									<Icon>
+										<FiMail />
+									</Icon>
+									<Input placeholder="Email" />
+								</InputContainer>
+								<MessageForUser>{emailMessage}</MessageForUser>
+
+								<Button onClick={HandleRemind}>Remind</Button>
+							</Form>
+						</RemindPassword>
+					) : (
+						''
+					)}
 				</FormContainer>
 			</Wrapper>
 			<Newsletter />

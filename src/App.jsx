@@ -12,7 +12,10 @@ import PageRoutes from './routes/PageRoutes';
 
 function App() {
 	const [cartItems, setCartItems] = useState([]);
-	const [users, setUsers] = useState([]);
+	const [users, setUsers] = useState([
+		{ name: 'User1', password: 'Qwertyqwerty1', email: 'user1@mail.com' },
+	]);
+	const [isAuth, setIsAuth] = useState(false);
 	const [loggedUser, setLoggedUser] = useState({});
 
 	return (
@@ -22,6 +25,10 @@ function App() {
 				setCartItems,
 				users,
 				setUsers,
+				isAuth,
+				setIsAuth,
+				loggedUser,
+				setLoggedUser,
 			}}
 		>
 			<BrowserRouter>

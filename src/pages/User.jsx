@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { mobile, userCustom } from '../styles/responsive';
 import Navbar from '../components/Navbar';
 import Announcement from '../components/Announcement';
@@ -10,83 +11,113 @@ import { FaRegUser } from 'react-icons/fa';
 import { FaRegHeart } from 'react-icons/fa';
 
 const Container = styled.div``;
-const ImageContainer = styled.div`
-	background-image: url('https://images.unsplash.com/photo-1589363358751-ab05797e5629?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2304');
+
+const UserContainer = styled.div`
+	min-height: 100vh;
+
+	background-image: url(https://images.unsplash.com/photo-1483985988355-763728e1935b?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470);
 	background-position: center;
 	background-size: cover;
-	padding: 2rem;
+	background-repeat: no-repeat;
+	padding: 2rem 1rem;
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: center;
 `;
-const UserContainer = styled.div`
-	min-height: 70vh;
-
-	background-color: #d5d3c6;
-	padding: 3rem;
-	position: relative;
-	border-radius: 0.5rem;
-	max-width: 35rem;
+const Wrapper = styled.div`
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+	width: 100%;
+	max-width: 70rem;
+	@media only screen and (max-width: 1000px) {
+		flex-direction: column;
+		align-items: center;
+	}
+`;
+const LeftWrapper = styled.div`
+	background-color: #e1d0c3e0;
+	max-width: 30rem;
+	padding: 1rem;
+	flex: 1;
 	width: 100%;
 `;
-const Wrapper = styled.div`
-	padding-top: 4rem;
-	border-radius: 0.5rem;
-	backdrop-filter: blur(8px) saturate(200%);
-	-webkit-backdrop-filter: blur(8px) saturate(200%);
-	background-color: #928474ae;
-	background-color: #92847484;
-	border-radius: 12px;
-	border: 1px solid rgba(255, 255, 255, 0.125);
+const RightWrapper = styled.div`
+	background-color: #e1d0c3e0;
+	max-width: 30rem;
+	padding: 1rem;
+	flex: 1;
+	width: 100%;
 `;
 
 const Title = styled.h1`
-	z-index: 10;
 	text-align: center;
-	position: absolute;
-	color: #504b4b;
-	background-color: #d5d3c6;
-
-	height: 6rem;
-	min-width: 12rem;
-	padding: 2rem;
-	top: -0.7rem;
-	left: 0;
-	border-radius: 0.5rem;
-
-	${userCustom({
-		minWidth: '5rem',
-		maxWidth: '10rem',
-		fontSize: '1.3rem',
-	})}
 `;
+const MiddleLine = styled.span`
+	background-color: black;
+	width: 100%;
+	height: 0.2rem;
+	flex: 1;
+`;
+const SeparatorText = styled.div`
+	flex: 2;
+	font-size: 1.3rem;
+	font-weight: 500;
+`;
+const Separator = styled.div`
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	margin: 1rem 0;
+	text-align: center;
+`;
+
 const Icon = styled.span`
 	margin-right: 0.5rem;
 `;
 const OptionsContainer = styled.div`
+	width: 100%;
 	padding: 1rem;
 	display: flex;
+
 	gap: 1rem;
-	${userCustom({ flexDirection: 'column' })}
+	@media only screen and (max-width: 560px) {
+		flex-direction: column;
+	}
 `;
 
-const Option = styled.div`
+const Input = styled.input`
+	width: 100%;
+	height: 3rem;
+	outline: none;
+	border: none;
+	padding-left: 0.5rem;
+	font-size: 1.3rem;
+`;
+
+const Button = styled.button`
+	height: 3rem;
+	min-width: 10rem;
+	max-width: 10rem;
+	padding: 1rem 2rem;
+	background-color: teal;
+	border: none;
+	outline: none;
+	color: white;
+	font-size: 1.3rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	cursor: pointer;
-	font-size: 1.2rem;
-	font-style: italic;
-	font-weight: 500;
-	transition: color ease 0.3s;
+	transition: background ease 0.3s;
+
 	&:hover {
-		color: #424141;
+		background-color: black;
 	}
-	${userCustom({
-		fontSize: '1rem',
-	})}
 `;
-const WishTitle = styled.h2`
-	text-align: center;
-	margin: 3rem 1rem 1rem 1rem;
-`;
+
 const WishList = styled.div`
 	min-height: 20vh;
 	display: flex;
@@ -108,41 +139,94 @@ const WishPicture = styled.img`
 `;
 
 const User = () => {
-	const { users, setUsers, loggedUser, setLoggedUser } =
+	const { users, setUsers, loggedUser, setLoggedUser, isAuth, setIsAuth } =
 		useContext(EcommerceContext);
+	const navigate = useNavigate();
+
+	const HandleSignOut = () => {
+		setIsAuth(false);
+		navigate('/home');
+	};
 
 	return (
 		<Container>
 			<Navbar />
 			<Announcement />
-			<ImageContainer>
-				<UserContainer>
-					<Title>
-						<Icon>
-							<FaRegUser />
-						</Icon>
-						Artiom
-					</Title>
+			<UserContainer>
+				{isAuth ? (
 					<Wrapper>
-						<OptionsContainer>
-							<Option>Change Password</Option>
-							<Option>Change Email</Option>
-							<Option>Sign Out</Option>
-						</OptionsContainer>
-						<WishTitle>
-							Your WishList <FaRegHeart />
-						</WishTitle>
-						<WishList>
-							<WishListItem>
-								<WishPicture src="https://images.unsplash.com/photo-1521369909029-2afed882baee?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470" />
-							</WishListItem>
-							<WishListItem>
-								<WishPicture src="https://images.unsplash.com/photo-1574368822296-1dfd47114b1c?ixlib=rb-1.2.1&raw_url=true&q=80&fm=jpg&crop=entropy&cs=tinysrgb&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476"></WishPicture>
-							</WishListItem>
-						</WishList>
+						<LeftWrapper>
+							<Title>
+								<Icon>
+									<FaRegUser />
+								</Icon>
+								{loggedUser.name}
+							</Title>
+							<Separator>
+								<MiddleLine />
+								<SeparatorText>Change Password</SeparatorText>
+								<MiddleLine />
+							</Separator>
+							<OptionsContainer>
+								<Input placeholder="New Password" />
+								<Button>Change</Button>
+							</OptionsContainer>
+							<Separator>
+								<MiddleLine />
+								<SeparatorText>Change Email</SeparatorText>
+								<MiddleLine />
+							</Separator>
+							<OptionsContainer>
+								<Input placeholder="New Email" />
+								<Button>Change</Button>
+							</OptionsContainer>
+							<Separator>
+								<MiddleLine />
+								<SeparatorText>Sign Out</SeparatorText>
+								<MiddleLine />
+							</Separator>
+							<OptionsContainer>
+								<Button onClick={HandleSignOut}>
+									Sign Out
+								</Button>
+							</OptionsContainer>
+						</LeftWrapper>
+						<RightWrapper>
+							<Title>
+								<Icon>
+									<FaRegHeart />
+								</Icon>
+							</Title>
+							<Separator>
+								<MiddleLine />
+								<SeparatorText>Wishlist</SeparatorText>
+								<MiddleLine />
+							</Separator>
+
+							<WishList>
+								<WishListItem>
+									<WishPicture src="https://images.unsplash.com/photo-1521369909029-2afed882baee?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470" />
+								</WishListItem>
+								<WishListItem>
+									<WishPicture src="https://images.unsplash.com/photo-1574368822296-1dfd47114b1c?ixlib=rb-1.2.1&raw_url=true&q=80&fm=jpg&crop=entropy&cs=tinysrgb&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476"></WishPicture>
+								</WishListItem>
+							</WishList>
+							<Separator>
+								<MiddleLine />
+								<SeparatorText>Clear Wishlist</SeparatorText>
+								<MiddleLine />
+							</Separator>
+
+							<OptionsContainer>
+								<Button>Clear</Button>
+							</OptionsContainer>
+						</RightWrapper>
 					</Wrapper>
-				</UserContainer>
-			</ImageContainer>
+				) : (
+					''
+				)}
+			</UserContainer>
+
 			<Newsletter />
 			<Footer />
 		</Container>
