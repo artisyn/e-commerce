@@ -18,36 +18,20 @@ const Info = styled.div`
 	transition: opacity ease 0.7s;
 `;
 const Container = styled.div`
-	padding: 1rem;
 	overflow: hidden;
 	position: relative;
 	flex: 1;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	flex-direction: column;
-	/* height: 21rem;
+	height: 21rem;
 	min-width: 17rem;
-	max-width: 17rem; */
-
-	height: 40vw;
-	min-width: 30vw;
-	max-width: 30vw;
-
-	color: black;
+	max-width: 17rem;
 	border: 1px solid black;
 
 	&:hover ${Info} {
 		opacity: 1;
 	}
-`;
-const ImageContainer = styled.div`
-	overflow: hidden;
-	flex: 2;
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 `;
 const Image = styled.img`
 	height: 90%;
@@ -72,22 +56,11 @@ const Icon = styled.div`
 		color: white;
 	}
 `;
-const Name = styled.h2`
-	z-index: 10;
-	margin: 0;
-`;
-const Price = styled.h3`
-	z-index: 10;
-	margin: 0;
-`;
 
-const Product = ({ product }) => {
+const PopularProduct = ({ product }) => {
 	return (
 		<Container>
-			<ImageContainer>
-				<Image src={product.img} />
-			</ImageContainer>
-
+			<Image src={product.img} />
 			<Info>
 				<Icon>
 					<ShoppingCartOutlinedIcon />
@@ -99,13 +72,8 @@ const Product = ({ product }) => {
 					<FavoriteBorderOutlinedIcon />
 				</Icon>
 			</Info>
-			<Name>{product.name}</Name>
-			<Price>
-				{product.price}
-				{'$'}
-			</Price>
 		</Container>
 	);
 };
 
-export default Product;
+export default PopularProduct;

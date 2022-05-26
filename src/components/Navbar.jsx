@@ -189,7 +189,7 @@ const SectionCategory = styled.span`
 `;
 
 const Navbar = () => {
-	const { isAuth } = useContext(EcommerceContext);
+	const { isAuth, loggedUser } = useContext(EcommerceContext);
 	const [mobSearch, setMobSearch] = useState(false);
 	const [menu, setMenu] = useState(false);
 
@@ -241,7 +241,7 @@ const Navbar = () => {
 					)}
 
 					{isAuth ? (
-						<StyledLink to={'/User'}>
+						<StyledLink to={`/User/${loggedUser.name}`}>
 							<FaRegUser style={{ fontSize: '1.5rem' }} />
 						</StyledLink>
 					) : (

@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { EcommerceContext } from '../context/context';
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
 import Announcement from '../components/Announcement';
-import Products from '../components/Products';
+import PopularProducts from '../components/PopularProducts';
 import Newsletter from '../components/Newsletter';
 import Footer from '../components/Footer';
 import { mobile } from '../styles/responsive';
 import { IoOptions } from 'react-icons/io5';
 import { BiSort } from 'react-icons/bi';
+import SelectedCategoryProducts from '../components/Products';
 
 const Container = styled.div``;
 const FilterContainer = styled.div`
@@ -55,11 +57,13 @@ const Icon = styled.span`
 `;
 
 const ProductList = () => {
+	const { selectedCategory, setSelectedCategory } =
+		useContext(EcommerceContext);
 	return (
 		<Container>
-			<Announcement />
 			<Navbar />
-			<Title>Dresses</Title>
+			<Announcement />
+			<Title>{selectedCategory.toUpperCase()}</Title>
 			<FilterContainer>
 				<Filter>
 					<FilterText>
@@ -113,7 +117,8 @@ const ProductList = () => {
 					</Select>
 				</Filter>
 			</FilterContainer>
-			<Products />
+			<SelectedCategoryProducts />
+			<PopularProducts />
 			<Newsletter />
 			<Footer />
 		</Container>

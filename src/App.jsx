@@ -2,6 +2,7 @@ import './App.scss';
 import { BrowserRouter } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { EcommerceContext } from '../src/context/context';
+import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import ProductList from './pages/ProductList';
 import Register from './pages/Register';
@@ -17,6 +18,7 @@ function App() {
 	]);
 	const [isAuth, setIsAuth] = useState(false);
 	const [loggedUser, setLoggedUser] = useState({});
+	const [selectedCategory, setSelectedCategory] = useState('');
 
 	return (
 		<EcommerceContext.Provider
@@ -29,12 +31,16 @@ function App() {
 				setIsAuth,
 				loggedUser,
 				setLoggedUser,
+				selectedCategory,
+				setSelectedCategory,
 			}}
 		>
 			<BrowserRouter>
-				<div className="App">
-					<PageRoutes />
-				</div>
+				<ScrollToTop>
+					<div className="App">
+						<PageRoutes />
+					</div>
+				</ScrollToTop>
 			</BrowserRouter>
 		</EcommerceContext.Provider>
 	);

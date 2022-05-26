@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { tablet } from '../styles/responsive';
+import { EcommerceContext } from '../context/context';
 
 const Container = styled.div`
 	border: 2px solid black;
@@ -52,12 +54,20 @@ const Button = styled.button`
 `;
 
 const CategoryItem = ({ item }) => {
+	const { selectedCategory, setSelectedCategory } =
+		useContext(EcommerceContext);
+	const navigate = useNavigate();
+	const HandleShopNow = (title) => {
+		setSelectedCategory(title.toLowerCase());
+		navigate('/ProductList');
+	};
 	return (
 		<Container background={item.img}>
-			{/* <Image src={item.img} /> */}
 			<Info>
 				<Title>{item.title}</Title>
-				<Button>SHOP NOW</Button>
+				<Button onClick={() => HandleShopNow(item.title)}>
+					SHOP NOW
+				</Button>
 			</Info>
 		</Container>
 	);

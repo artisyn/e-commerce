@@ -247,15 +247,14 @@ const Register = () => {
 			password: `${password}`,
 			email: `${email}`,
 		};
+
 		setUsers([...users, user]);
 		ClearFields();
 		setIsAuth(true);
 		setLoggedUser(user);
-		navigate('/user');
+		navigate(`/User/${user.name}`);
 	};
-	const HandleSignIn = (e) => {
-		e.preventDefault();
-	};
+
 	const HandleVisiblePassword = () => {
 		setVisiblePassword(!visiblePassword);
 	};

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { EcommerceContext } from '../context/context';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Announcement from '../components/Announcement';
 import Newsletter from '../components/Newsletter';
@@ -153,7 +153,6 @@ const Login = () => {
 		}
 		setPasswordMessage('');
 		const user = users.find((el) => el.email === name);
-		console.log(user);
 
 		if (!user) {
 			setNameMessage('Email or Password is incorrect');
@@ -169,7 +168,7 @@ const Login = () => {
 		if (user.password === password) {
 			setIsAuth(true);
 			setLoggedUser(user);
-			navigate('/user');
+			navigate(`/user/${user.name}`);
 		}
 	};
 	const HandleRemind = (e) => {
