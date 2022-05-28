@@ -147,6 +147,7 @@ const ProductPage = () => {
 		useContext(EcommerceContext);
 	const [amount, setAmount] = useState(1);
 	const [size, setSize] = useState(`${selectedProduct.sizes[0]}`);
+	const [showMessage, setShowMessage] = useState(false);
 	const IncreaseAmount = () => {
 		if (amount === 20) return;
 		setAmount(amount + 1);
@@ -158,6 +159,12 @@ const ProductPage = () => {
 	const HandleSizeChange = (e) => {
 		setSize(e.target.value);
 	};
+	const ShowTemporary = () => {
+		setShowMessage(true);
+		setTimeout(() => {
+			setShowMessage(false);
+		}, 6000);
+	};
 	const HandleAddToCart = () => {
 		if (cartItems.findIndex((el) => el.id === selectedProduct.id) !== -1) {
 			const i = cartItems.findIndex((el) => el.id === selectedProduct.id);
@@ -166,7 +173,7 @@ const ProductPage = () => {
 			tempObj.amount = +tempObj.amount + +amount;
 			tempArr[i] = tempObj;
 			setCartItems([...tempArr]);
-			console.log(cartItems);
+			ShowTemporary();
 			return;
 		}
 		setCartItems([
@@ -177,13 +184,15 @@ const ProductPage = () => {
 				name: `${selectedProduct.name}`,
 				size: `${size}`,
 				color: `${selectedProduct.color}`,
-				amount: `${amount}`,
+				amount: +`${amount}`,
+				price: `${selectedProduct.price}`,
 			},
 		]);
+		ShowTemporary();
 	};
 	return (
 		<Container>
-			<Navbar />
+			<Navbar showMessage={showMessage} />
 			<Announcement />
 
 			<Wrapper>

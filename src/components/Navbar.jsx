@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { EcommerceContext } from '../context/context';
 import styled from 'styled-components';
+import { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { mobile, tablet, tabletMin } from '../styles/responsive';
 import { IoSearchSharp } from 'react-icons/io5';
@@ -87,12 +88,32 @@ const Center = styled.div`
 	${tablet({ flex: 'auto' })}
 `;
 const Right = styled.div`
+	position: relative;
 	flex: 1;
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
 	gap: 1rem;
 	${tablet({ flex: 'auto' })}
+`;
+// Animation
+
+const ShowBrieflyAnimation = keyframes`
+ 0% {height: 0; opacity: 0; }
+ 50% {height: 3rem; opacity: 1;}
+ 100% {height: 0; opacity: 0;}
+`;
+const CartChangeContainer = styled.div`
+	position: absolute;
+	min-height: 3rem;
+	width: 10rem;
+	bottom: -4.8rem;
+	right: -1.5rem;
+	background-color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	animation: ${ShowBrieflyAnimation} ease-in-out 6s;
 `;
 
 // Mobile Components
@@ -188,7 +209,7 @@ const SectionCategory = styled.span`
 	}
 `;
 
-const Navbar = () => {
+const Navbar = ({ showMessage }) => {
 	const { isAuth, loggedUser, cartItems } = useContext(EcommerceContext);
 	const [mobSearch, setMobSearch] = useState(false);
 	const [menu, setMenu] = useState(false);
@@ -263,6 +284,13 @@ const Navbar = () => {
 							</Badge>
 						</MenuCart>
 					</StyledLink>
+					{!showMessage ? (
+						''
+					) : (
+						<CartChangeContainer>
+							Item was Added
+						</CartChangeContainer>
+					)}
 				</Right>
 			</Wrapper>
 

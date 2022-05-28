@@ -20,6 +20,7 @@ function App() {
 	const [loggedUser, setLoggedUser] = useState({});
 	const [selectedCategory, setSelectedCategory] = useState('');
 	const [selectedProduct, setSelectedProduct] = useState('');
+	const [checkoutPrice, setCheckoutPrice] = useState(0);
 
 	return (
 		<EcommerceContext.Provider
@@ -36,6 +37,8 @@ function App() {
 				setSelectedCategory,
 				selectedProduct,
 				setSelectedProduct,
+				checkoutPrice,
+				setCheckoutPrice,
 			}}
 		>
 			<BrowserRouter>

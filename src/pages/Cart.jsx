@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { EcommerceContext } from '../context/context';
+import { useNavigate } from 'react-router-dom';
+import { promoCodes } from '../data';
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
 import Announcement from '../components/Announcement';
-import Products from '../components/PopularProducts';
 import Newsletter from '../components/Newsletter';
 import Footer from '../components/Footer';
+import CartItem from '../components/CartItem';
 import { FiPhone } from 'react-icons/fi';
 import { FaCcVisa } from 'react-icons/fa';
 import { FaCcMastercard } from 'react-icons/fa';
 import { FaCcPaypal } from 'react-icons/fa';
-import { AiOutlinePlusSquare } from 'react-icons/ai';
-import { AiOutlineMinusSquare } from 'react-icons/ai';
 import { desktop, tablet, mobile } from '../styles/responsive';
-import { grid } from '@mui/system';
+import { ImHappy } from 'react-icons/im';
 
 const Container = styled.div``;
 const Wrapper = styled.div`
@@ -24,7 +25,7 @@ const Wrapper = styled.div`
 		flexDirection: 'column',
 	})}
 	${tablet({
-		padding: '0',
+		padding: '0.2rem',
 	})}
 `;
 const Left = styled.div`
@@ -35,103 +36,12 @@ const Left = styled.div`
 const Title = styled.h1`
 	text-align: left;
 `;
-const Message = styled.p`
-	text-align: left;
-	font-size: 1.2rem;
-	font-weight: bold;
-`;
-const CartItems = styled.div`
+const CartItemsContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
 `;
-const CartItem = styled.div`
-	border: 1px solid black;
-	max-height: 15rem;
-	padding: 1rem;
-	display: flex;
-	gap: 1rem;
-	${mobile({
-		maxHeight: 'fit-content',
-		display: 'grid',
-		gridTemplateRows: '1fr 1fr',
-	})}
-`;
 
-const ImageContainer = styled.div`
-	background-color: #0b0b0b11;
-	overflow: hidden;
-	padding: 1rem;
-	flex: 1;
-	${mobile({
-		maxHeight: '20rem',
-	})}
-`;
-
-const Image = styled.img`
-	height: 100%;
-	width: 100%;
-	object-fit: cover;
-	object-position: center;
-`;
-
-const InfoContainer = styled.div`
-	flex: 1;
-`;
-
-const CartItemTitle = styled.h2``;
-const IdContainer = styled.div`
-	font-size: 1.1rem;
-	font-weight: 600;
-`;
-const IdValue = styled.span`
-	color: teal;
-`;
-const ColorContainer = styled.div`
-	font-size: 1.1rem;
-	font-weight: 600;
-`;
-const Color = styled.span`
-	color: teal;
-`;
-const SizeContainer = styled.div`
-	font-size: 1.1rem;
-	font-weight: 600;
-`;
-const Size = styled.span`
-	color: teal;
-`;
-const CartQuantityContainer = styled.span`
-	display: flex;
-	gap: 1rem;
-	align-items: center;
-	justify-content: space-between;
-`;
-
-const AddContainer = styled.div`
-	display: flex;
-	gap: 0.5rem;
-	font-size: 1.5rem;
-	align-items: center;
-`;
-const RemoveContainer = styled.div``;
-
-const Add = styled.span`
-	cursor: pointer;
-`;
-const Remove = styled.span`
-	cursor: pointer;
-`;
-
-const QuantityInCart = styled.div`
-	font-size: 1.5rem;
-	font-weight: bold;
-`;
-
-const ItemPrice = styled.div`
-	font-size: 1.3rem;
-	font-weight: bold;
-`;
 const Right = styled.div`
 	border: 1px solid black;
 	flex: 1;
@@ -148,6 +58,7 @@ const QuantityContainer = styled.div`
 `;
 const Quantity = styled.span`
 	font-weight: bold;
+	margin-right: 0.5rem;
 `;
 const PaymentSection = styled.div`
 	border-bottom: 1px solid grey;
@@ -173,6 +84,12 @@ const PromocodeContainer = styled.div`
 `;
 const PromocodeButtonContainer = styled.div`
 	flex: 1;
+`;
+
+const PromoResult = styled.div`
+	color: teal;
+	font-size: 1.3rem;
+	margin: 1rem 0 0 0;
 `;
 
 const Button = styled.button`
@@ -212,7 +129,9 @@ const SubContainer = styled.div`
 const SubtotalText = styled.p`
 	font-size: 1.1rem;
 `;
-const PaymentSymbol = styled.span``;
+const PaymentSymbol = styled.span`
+	margin-left: 0.5rem;
+`;
 const TotalContainer = styled.div`
 	font-size: 1.3rem;
 	font-weight: 600;
@@ -225,6 +144,9 @@ const TotalContainer = styled.div`
 const Total = styled.span`
 	font-size: 1.2rem;
 	font-weight: bold;
+`;
+const TotalMessage = styled.div`
+	color: teal;
 `;
 
 const HelpContainer = styled.div`
@@ -255,188 +177,193 @@ const PaymentMethods = styled.div`
 	gap: 1rem;
 `;
 
+const EmptyCart = styled.div`
+	min-height: 60vh;
+	padding-top: 2rem;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	gap: 1rem;
+`;
+const EmptyCartText = styled.h2`
+	font-size: 1.3rem;
+	font-weight: 500;
+	letter-spacing: 0.05rem;
+	border-bottom: 2px solid teal;
+	text-align: center;
+`;
+const EmptyCartButton = styled.div`
+	max-width: 20rem;
+`;
+
 const Cart = () => {
+	const { cartItems, setCartItems, checkoutPrice, setCheckoutPrice } =
+		useContext(EcommerceContext);
+	const [promo, setPromo] = useState('');
+	const [promoText, setPromoText] = useState('');
+	const [promoName, setPromoName] = useState('');
+	const [discount, setDiscount] = useState(1);
+	const [totalPrice, setTotalPrice] = useState(
+		cartItems.reduce((acu, el) => {
+			const total = el.price * el.amount + acu;
+			return total;
+		}, 0)
+	);
+	const [finalPrice, setFinalPrice] = useState(0);
+
+	const navigate = useNavigate();
+
+	const HandlePromocodeInput = (e) => {
+		setPromo(e.target.value);
+	};
+	const HandlePromo = () => {
+		if (promoCodes.find((el) => el.name === promo)) {
+			const code = promoCodes.find((el) => el.name === promo);
+			setDiscount(code.percentOff);
+			setPromoText('Promocode Applied');
+			setPromoName(code.name);
+			return;
+		}
+		if (!promoCodes.find((el) => el.name === promo))
+			setPromoText('Promocode not found');
+	};
+	const HandleContinueShopping = () => {
+		navigate('/Home');
+	};
+
+	useEffect(() => {
+		setTotalPrice(
+			cartItems.reduce((acu, el) => {
+				const total = el.price * el.amount + acu;
+				return total;
+			}, 0)
+		);
+	}, [cartItems]);
+
+	useEffect(() => {
+		if (discount === 1) {
+			setFinalPrice(totalPrice);
+			return;
+		}
+		setFinalPrice(totalPrice - (totalPrice * discount) / 100);
+	}, [totalPrice, discount]);
+
+	const HandleCheckout = () => {
+		setCheckoutPrice(finalPrice);
+		navigate('/Checkout');
+	};
+
 	return (
 		<Container>
 			<Navbar />
 			<Announcement />
-			<Wrapper>
-				<Left>
-					<Title>Your Cart</Title>
-					<CartItems>
-						<CartItem>
-							<ImageContainer>
-								<Image src="https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80" />
-							</ImageContainer>
+			{cartItems.length !== 0 ? (
+				<Wrapper>
+					<Left>
+						<Title>Your Cart</Title>
+						<CartItemsContainer>
+							{cartItems.length !== 0
+								? cartItems.map((el) => (
+										<CartItem key={el.id} product={el} />
+								  ))
+								: ''}
+						</CartItemsContainer>
+					</Left>
+					<Right>
+						<PaymentContainer>
+							<PaymentSection>
+								<QuantityContainer>
+									<Quantity>{cartItems.length}</Quantity>
+									items in your Cart
+								</QuantityContainer>
+							</PaymentSection>
+							<PaymentSection>
+								<PromocodeText>
+									Enter your promocode
+								</PromocodeText>
+								<PromocodeContainer>
+									<PromocodeInput
+										value={promo}
+										onChange={HandlePromocodeInput}
+										placeholder="Enter Promocode"
+									/>
+									<PromocodeButtonContainer>
+										<Button onClick={HandlePromo}>
+											Apply
+										</Button>
+									</PromocodeButtonContainer>
+								</PromocodeContainer>
+								<PromoResult>{promoText}</PromoResult>
+							</PaymentSection>
+							<PaymentSection>
+								<SubtotalContainer>
+									<SubContainer>
+										Subtotal:
+										<Subtotal>
+											{totalPrice}
+											<PaymentSymbol>$</PaymentSymbol>
+										</Subtotal>
+									</SubContainer>
+									<SubtotalText>
+										INCL. VAT (Calculated in checkout)
+									</SubtotalText>
+								</SubtotalContainer>
+							</PaymentSection>
+							<PaymentSection>
+								<TotalContainer>
+									Total:
+									{discount === 1 ? (
+										''
+									) : (
+										<TotalMessage>
+											-{discount}% {promoName}
+										</TotalMessage>
+									)}
+									<Total>
+										{discount === 1
+											? totalPrice
+											: totalPrice -
+											  (totalPrice * discount) / 100}
+										<PaymentSymbol>$</PaymentSymbol>
+									</Total>
+								</TotalContainer>
+								<Button onClick={HandleCheckout}>
+									Check out
+								</Button>
+							</PaymentSection>
+							<PaymentMethods>
+								<FaCcVisa /> <FaCcMastercard /> <FaCcPaypal />
+							</PaymentMethods>
+							<HelpContainer>
+								<HelpText>
+									<Logo>
+										<FiPhone />
+									</Logo>
+									Need help with your purchase?
+								</HelpText>
+								<HelpContacts>
+									Call Customer Support on
+									<PhoneContainer>
+										+76 432 234 3452
+									</PhoneContainer>
+								</HelpContacts>
+							</HelpContainer>
+						</PaymentContainer>
+					</Right>
+				</Wrapper>
+			) : (
+				<EmptyCart>
+					<EmptyCartText>
+						Your Cart is Empty. Fill It With Happiness ! <ImHappy />
+					</EmptyCartText>
+					<EmptyCartButton>
+						<Button onClick={HandleContinueShopping}>
+							Continue Shopping
+						</Button>
+					</EmptyCartButton>
+				</EmptyCart>
+			)}
 
-							<InfoContainer>
-								<CartItemTitle>Super Bag</CartItemTitle>
-								<IdContainer>
-									Item Id: <IdValue>333121</IdValue>
-								</IdContainer>
-								<ColorContainer>
-									Color: <Color>Red Apple</Color>
-								</ColorContainer>
-								<SizeContainer>
-									Size: <Size>XL</Size>
-								</SizeContainer>
-								<CartQuantityContainer>
-									<AddContainer>
-										<Remove>
-											<AiOutlineMinusSquare />
-										</Remove>
-										<QuantityInCart>1</QuantityInCart>
-										<Add>
-											<AiOutlinePlusSquare />
-										</Add>
-									</AddContainer>
-
-									<RemoveContainer>
-										<Button>Remove</Button>
-									</RemoveContainer>
-								</CartQuantityContainer>
-								<ItemPrice>
-									( 10 <PaymentSymbol>$</PaymentSymbol> )
-								</ItemPrice>
-							</InfoContainer>
-						</CartItem>
-						<CartItem>
-							<ImageContainer>
-								<Image src="https://images.unsplash.com/photo-1566150905968-62f0de3d6df2?ixlib=rb-1.2.1&raw_url=true&q=80&fm=jpg&crop=entropy&cs=tinysrgb&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470" />
-							</ImageContainer>
-
-							<InfoContainer>
-								<CartItemTitle>Super Bag</CartItemTitle>
-								<IdContainer>
-									Item Id: <IdValue>333121</IdValue>
-								</IdContainer>
-								<ColorContainer>
-									Color: <Color>Red Apple</Color>
-								</ColorContainer>
-								<SizeContainer>
-									Size: <Size>XL</Size>
-								</SizeContainer>
-								<CartQuantityContainer>
-									<AddContainer>
-										<Remove>
-											<AiOutlineMinusSquare />
-										</Remove>
-										<QuantityInCart>1</QuantityInCart>
-										<Add>
-											<AiOutlinePlusSquare />
-										</Add>
-									</AddContainer>
-
-									<RemoveContainer>
-										<Button>Remove</Button>
-									</RemoveContainer>
-								</CartQuantityContainer>
-								<ItemPrice>
-									( 10 <PaymentSymbol>$</PaymentSymbol> )
-								</ItemPrice>
-							</InfoContainer>
-						</CartItem>
-						<CartItem>
-							<ImageContainer>
-								<Image src="https://images.unsplash.com/photo-1585488763177-bde7d15fd3cf?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687" />
-							</ImageContainer>
-
-							<InfoContainer>
-								<CartItemTitle>Super Bag</CartItemTitle>
-								<IdContainer>
-									Item Id: <IdValue>333121</IdValue>
-								</IdContainer>
-								<ColorContainer>
-									Color: <Color>Red Apple</Color>
-								</ColorContainer>
-								<SizeContainer>
-									Size: <Size>XL</Size>
-								</SizeContainer>
-								<CartQuantityContainer>
-									<AddContainer>
-										<Remove>
-											<AiOutlineMinusSquare />
-										</Remove>
-										<QuantityInCart>1</QuantityInCart>
-										<Add>
-											<AiOutlinePlusSquare />
-										</Add>
-									</AddContainer>
-
-									<RemoveContainer>
-										<Button>Remove</Button>
-									</RemoveContainer>
-								</CartQuantityContainer>
-								<ItemPrice>
-									( 10 <PaymentSymbol>$</PaymentSymbol> )
-								</ItemPrice>
-							</InfoContainer>
-						</CartItem>
-					</CartItems>
-					<Message>
-						Your shopping bag is empty. Explore our store and fill
-						it up!
-					</Message>
-					<Button>Continue Shopping</Button>
-				</Left>
-				<Right>
-					<PaymentContainer>
-						<PaymentSection>
-							<QuantityContainer>
-								<Quantity>1</Quantity> items in your Cart
-							</QuantityContainer>
-						</PaymentSection>
-						<PaymentSection>
-							<PromocodeText>Enter your promocode</PromocodeText>
-							<PromocodeContainer>
-								<PromocodeInput placeholder="Enter Promocode" />
-								<PromocodeButtonContainer>
-									<Button>Apply</Button>
-								</PromocodeButtonContainer>
-							</PromocodeContainer>
-						</PaymentSection>
-						<PaymentSection>
-							<SubtotalContainer>
-								<SubContainer>
-									Subtotal:
-									<Subtotal>
-										100 <PaymentSymbol>$</PaymentSymbol>
-									</Subtotal>
-								</SubContainer>
-								<SubtotalText>
-									INCL. VAT (Calculated in checkout)
-								</SubtotalText>
-							</SubtotalContainer>
-						</PaymentSection>
-						<PaymentSection>
-							<TotalContainer>
-								Total:
-								<Total>
-									100 <PaymentSymbol>$</PaymentSymbol>
-								</Total>
-							</TotalContainer>
-							<Button>Check out</Button>
-						</PaymentSection>
-						<PaymentMethods>
-							<FaCcVisa /> <FaCcMastercard /> <FaCcPaypal />
-						</PaymentMethods>
-						<HelpContainer>
-							<HelpText>
-								<Logo>
-									<FiPhone />
-								</Logo>
-								Need help with your purchase?
-							</HelpText>
-							<HelpContacts>
-								Call Customer Support on
-								<PhoneContainer>
-									+76 432 234 3452
-								</PhoneContainer>
-							</HelpContacts>
-						</HelpContainer>
-					</PaymentContainer>
-				</Right>
-			</Wrapper>
 			<Newsletter />
 			<Footer />
 		</Container>

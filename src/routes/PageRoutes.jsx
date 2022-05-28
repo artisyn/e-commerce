@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Cart from '../pages/Cart';
+import Checkout from '../pages/Checkout';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import ProductList from '../pages/ProductList';
@@ -17,6 +18,7 @@ const PageRoutes = () => {
 			<Route path="/ProductList" element={<ProductList />} />
 			<Route path="/ProductPage/:productId" element={<ProductPage />} />
 			<Route path="/User/:userName" element={<User />} />
+			<Route path="/Checkout" element={<Checkout />} />
 			<Route path="*" element={<Navigate to="/Home" />} />
 		</Routes>
 	);

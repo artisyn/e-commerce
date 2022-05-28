@@ -365,3 +365,8 @@ export const AllProducts = [
 		sizes: ['XS', 'S', 'L'],
 	},
 ];
+export const promoCodes = [
+	{ name: '2022', percentOff: 10 },
+	{ name: 'CHEAP', percentOff: 50 },
+	{ name: 'FREE', percentOff: 100 },
+];
