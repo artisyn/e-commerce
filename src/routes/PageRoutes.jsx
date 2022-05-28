@@ -15,7 +15,7 @@ const PageRoutes = () => {
 			<Route path="/Login" element={<Login />} />
 			<Route path="/Register" element={<Register />} />
 			<Route path="/ProductList" element={<ProductList />} />
-			<Route path="/ProductPage" element={<ProductPage />} />
+			<Route path="/ProductPage/:productId" element={<ProductPage />} />
 			<Route path="/User/:userName" element={<User />} />
 			<Route path="*" element={<Navigate to="/Home" />} />
 		</Routes>

@@ -1,22 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { EcommerceContext } from '../context/context';
 import styled from 'styled-components';
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-const Info = styled.div`
+import { useNavigate } from 'react-router-dom';
+
+const HoverBorderTop = styled.div`
 	position: absolute;
-	width: 100%;
-	height: 100%;
 	top: 0;
-	left: 0;
-	z-index: 3;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 1rem;
-	opacity: 0;
+	width: 100%;
+	height: 0.4rem;
+	background-color: teal;
 	transition: opacity ease 0.7s;
+	opacity: 0;
+	border-bottom-left-radius: 0.5rem;
+	border-bottom-right-radius: 0.5rem;
 `;
+
 const Container = styled.div`
 	padding: 1rem;
 	overflow: hidden;
@@ -26,10 +24,6 @@ const Container = styled.div`
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
-	/* height: 21rem;
-	min-width: 17rem;
-	max-width: 17rem; */
-
 	height: 40vw;
 	min-width: 30vw;
 	max-width: 30vw;
@@ -37,8 +31,19 @@ const Container = styled.div`
 	color: black;
 	border: 1px solid black;
 
-	&:hover ${Info} {
+	&:hover ${HoverBorderTop} {
 		opacity: 1;
+	}
+	@media only screen and (max-width: 1200px) {
+		min-width: 21rem;
+		max-width: 21rem;
+		height: 26rem;
+	}
+	@media only screen and (max-width: 1085px) {
+		min-width: 46vw;
+		max-width: 46vw;
+		width: 46vw;
+		height: 65vw;
 	}
 `;
 const ImageContainer = styled.div`
@@ -48,6 +53,7 @@ const ImageContainer = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	cursor: pointer;
 `;
 const Image = styled.img`
 	height: 90%;
@@ -57,24 +63,14 @@ const Image = styled.img`
 	object-fit: cover;
 `;
 
-const Icon = styled.div`
-	width: 3rem;
-	height: 3rem;
-	border-radius: 50%;
-	background-color: gray;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
-	transition: background ease 0.3s;
-	&:hover {
-		background-color: #80808078;
-		color: white;
-	}
-`;
 const Name = styled.h2`
 	z-index: 10;
 	margin: 0;
+	transition: color ease 0.4s;
+	cursor: pointer;
+	&:hover {
+		color: teal;
+	}
 `;
 const Price = styled.h3`
 	z-index: 10;
@@ -82,24 +78,20 @@ const Price = styled.h3`
 `;
 
 const Product = ({ product }) => {
+	const { selectedProduct, setSelectedProduct } =
+		useContext(EcommerceContext);
+	const navigate = useNavigate();
+	const HandleClick = (product) => {
+		setSelectedProduct(product);
+		navigate(`/ProductPage/${product.id}`);
+	};
 	return (
 		<Container>
-			<ImageContainer>
+			<HoverBorderTop />
+			<ImageContainer onClick={() => HandleClick(product)}>
 				<Image src={product.img} />
 			</ImageContainer>
-
-			<Info>
-				<Icon>
-					<ShoppingCartOutlinedIcon />
-				</Icon>
-				<Icon>
-					<SearchOutlinedIcon />
-				</Icon>
-				<Icon>
-					<FavoriteBorderOutlinedIcon />
-				</Icon>
-			</Info>
-			<Name>{product.name}</Name>
+			<Name onClick={() => HandleClick(product)}>{product.name}</Name>
 			<Price>
 				{product.price}
 				{'$'}

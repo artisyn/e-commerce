@@ -100,6 +100,8 @@ export const AllProducts = [
 		categorie: 'headwear',
 		name: 'Cute Hat 1',
 		price: 10,
+		color: 'black',
+		sizes: ['L', 'XL'],
 	},
 	{
 		id: 2,
@@ -107,6 +109,8 @@ export const AllProducts = [
 		categorie: 'headwear',
 		name: 'Cute Hat 2',
 		price: 14,
+		color: 'yellow',
+		sizes: ['XS', 'S'],
 	},
 	{
 		id: 3,
@@ -114,6 +118,8 @@ export const AllProducts = [
 		categorie: 'headwear',
 		name: 'Cute Hat 3',
 		price: 6,
+		color: 'pink',
+		sizes: ['M', 'XXL'],
 	},
 	{
 		id: 4,
@@ -121,6 +127,8 @@ export const AllProducts = [
 		categorie: 'headwear',
 		name: 'Cute Hat 4',
 		price: 17,
+		color: 'orange',
+		sizes: ['XL', 'XXL'],
 	},
 	{
 		id: 5,
@@ -128,6 +136,8 @@ export const AllProducts = [
 		categorie: 'headwear',
 		name: 'Cute Hat 5',
 		price: 33,
+		color: 'violet',
+		sizes: ['L', 'XL'],
 	},
 	{
 		id: 6,
@@ -135,6 +145,8 @@ export const AllProducts = [
 		categorie: 'headwear',
 		name: 'Cute Hat 6',
 		price: 61,
+		color: 'green',
+		sizes: ['XS', 'XL', 'XXL'],
 	},
 	{
 		id: 7,
@@ -142,6 +154,8 @@ export const AllProducts = [
 		categorie: 'headwear',
 		name: 'Cute Hat 7',
 		price: 35,
+		color: 'yellow',
+		sizes: ['M', 'XXL'],
 	},
 	{
 		id: 8,
@@ -149,6 +163,8 @@ export const AllProducts = [
 		categorie: 'headwear',
 		name: 'Cute Hat 8',
 		price: 54,
+		color: 'yellow',
+		sizes: ['S', 'L', 'XXL'],
 	},
 	{
 		id: 9,
@@ -156,6 +172,8 @@ export const AllProducts = [
 		categorie: 'headwear',
 		name: 'Cute Hat 9',
 		price: 83,
+		color: 'blue',
+		sizes: ['M', 'XL', 'XXL'],
 	},
 	{
 		id: 10,
@@ -163,6 +181,8 @@ export const AllProducts = [
 		categorie: 'headwear',
 		name: 'Cute Hat 10',
 		price: 43,
+		color: 'yellow',
+		sizes: ['XS', 'M', 'XXL'],
 	},
 	{
 		id: 11,
@@ -170,6 +190,8 @@ export const AllProducts = [
 		categorie: 'shirts',
 		name: 'Cute Shirt 1',
 		price: 26,
+		color: 'white',
+		sizes: ['XS', 'S', 'L', 'XL'],
 	},
 	{
 		id: 12,
@@ -177,6 +199,8 @@ export const AllProducts = [
 		categorie: 'shirts',
 		name: 'Cute Shirt 2',
 		price: 41,
+		color: 'blue',
+		sizes: ['XS', 'S'],
 	},
 	{
 		id: 13,
@@ -184,6 +208,8 @@ export const AllProducts = [
 		categorie: 'shirts',
 		name: 'Cute Shirt 3',
 		price: 77,
+		color: 'blue',
+		sizes: ['L', 'XL'],
 	},
 	{
 		id: 14,
@@ -191,6 +217,8 @@ export const AllProducts = [
 		categorie: 'shirts',
 		name: 'Cute Shirt 4',
 		price: 67,
+		color: 'blue',
+		sizes: ['S', 'L'],
 	},
 	{
 		id: 15,
@@ -198,6 +226,8 @@ export const AllProducts = [
 		categorie: 'shirts',
 		name: 'Cute Shirt 5',
 		price: 42,
+		color: 'red',
+		sizes: ['XS', 'S', 'L', 'XL'],
 	},
 	{
 		id: 16,
@@ -205,6 +235,8 @@ export const AllProducts = [
 		categorie: 'shirts',
 		name: 'Cute Shirt 6',
 		price: 46,
+		color: 'white',
+		sizes: ['XS', 'S'],
 	},
 	{
 		id: 17,
@@ -212,6 +244,8 @@ export const AllProducts = [
 		categorie: 'shirts',
 		name: 'Cute Shirt 7',
 		price: 31,
+		color: 'white',
+		sizes: ['L', 'XL'],
 	},
 	{
 		id: 18,
@@ -219,6 +253,8 @@ export const AllProducts = [
 		categorie: 'shirts',
 		name: 'Cute Shirt 8',
 		price: 88,
+		color: 'white',
+		sizes: ['XL', 'XXL'],
 	},
 	{
 		id: 19,
@@ -226,6 +262,8 @@ export const AllProducts = [
 		categorie: 'shirts',
 		name: 'Cute Shirt 9',
 		price: 36,
+		color: 'white',
+		sizes: ['XS', 'S'],
 	},
 	{
 		id: 20,
@@ -233,6 +271,8 @@ export const AllProducts = [
 		categorie: 'shirts',
 		name: 'Cute Shirt 10',
 		price: 76,
+		color: 'white',
+		sizes: ['XS', 'S', 'L'],
 	},
 	{
 		id: 21,
@@ -240,6 +280,8 @@ export const AllProducts = [
 		categorie: 'sneakers',
 		name: 'Cute Sneaker 1',
 		price: 88,
+		color: 'orange',
+		sizes: ['XL', 'XXL'],
 	},
 	{
 		id: 22,
@@ -247,6 +289,8 @@ export const AllProducts = [
 		categorie: 'sneakers',
 		name: 'Cute Sneaker 2',
 		price: 123,
+		color: 'brown',
+		sizes: ['S', 'L'],
 	},
 	{
 		id: 23,
@@ -254,6 +298,8 @@ export const AllProducts = [
 		categorie: 'sneakers',
 		name: 'Cute Sneaker 3',
 		price: 51,
+		color: 'white',
+		sizes: ['XS', 'S', 'L'],
 	},
 	{
 		id: 24,
@@ -261,6 +307,8 @@ export const AllProducts = [
 		categorie: 'sneakers',
 		name: 'Cute Sneaker 4',
 		price: 66,
+		color: 'black',
+		sizes: ['XS', 'S'],
 	},
 	{
 		id: 25,
@@ -268,6 +316,8 @@ export const AllProducts = [
 		categorie: 'sneakers',
 		name: 'Cute Sneaker 5',
 		price: 213,
+		color: 'white',
+		sizes: ['S', 'L', 'XL'],
 	},
 	{
 		id: 26,
@@ -275,6 +325,8 @@ export const AllProducts = [
 		categorie: 'sneakers',
 		name: 'Cute Sneaker 6',
 		price: 77,
+		color: 'white',
+		sizes: ['XS', 'S', 'L'],
 	},
 	{
 		id: 27,
@@ -282,6 +334,8 @@ export const AllProducts = [
 		categorie: 'sneakers',
 		name: 'Cute Sneaker 7',
 		price: 47,
+		color: 'blue',
+		sizes: ['XS', 'S', 'XL'],
 	},
 	{
 		id: 28,
@@ -289,6 +343,8 @@ export const AllProducts = [
 		categorie: 'sneakers',
 		name: 'Cute Sneaker 8',
 		price: 99,
+		color: 'white',
+		sizes: ['L'],
 	},
 	{
 		id: 29,
@@ -296,6 +352,8 @@ export const AllProducts = [
 		categorie: 'sneakers',
 		name: 'Cute Sneaker 9',
 		price: 21,
+		color: 'blue',
+		sizes: ['XS', 'S', 'L', 'XL'],
 	},
 	{
 		id: 30,
@@ -303,5 +361,7 @@ export const AllProducts = [
 		categorie: 'sneakers',
 		name: 'Cute Sneaker 10',
 		price: 113,
+		color: 'pink',
+		sizes: ['XS', 'S', 'L'],
 	},
 ];

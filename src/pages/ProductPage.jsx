@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { EcommerceContext } from '../context/context';
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
 import Announcement from '../components/Announcement';
@@ -142,6 +143,44 @@ const Button = styled.button`
 `;
 
 const ProductPage = () => {
+	const { selectedProduct, cartItems, setCartItems } =
+		useContext(EcommerceContext);
+	const [amount, setAmount] = useState(1);
+	const [size, setSize] = useState(`${selectedProduct.sizes[0]}`);
+	const IncreaseAmount = () => {
+		if (amount === 20) return;
+		setAmount(amount + 1);
+	};
+	const DecreaseAmount = () => {
+		if (amount === 1) return;
+		setAmount(amount - 1);
+	};
+	const HandleSizeChange = (e) => {
+		setSize(e.target.value);
+	};
+	const HandleAddToCart = () => {
+		if (cartItems.findIndex((el) => el.id === selectedProduct.id) !== -1) {
+			const i = cartItems.findIndex((el) => el.id === selectedProduct.id);
+			let tempArr = [...cartItems];
+			let tempObj = { ...cartItems[i] };
+			tempObj.amount = +tempObj.amount + +amount;
+			tempArr[i] = tempObj;
+			setCartItems([...tempArr]);
+			console.log(cartItems);
+			return;
+		}
+		setCartItems([
+			...cartItems,
+			{
+				id: parseInt(`${selectedProduct.id}`),
+				img: `${selectedProduct.img}`,
+				name: `${selectedProduct.name}`,
+				size: `${size}`,
+				color: `${selectedProduct.color}`,
+				amount: `${amount}`,
+			},
+		]);
+	};
 	return (
 		<Container>
 			<Navbar />
@@ -149,48 +188,53 @@ const ProductPage = () => {
 
 			<Wrapper>
 				<Left>
-					<Image src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" />
+					<Image src={selectedProduct.img} />
 				</Left>
 				<Right>
-					<Title>Jack Rose Peach</Title>
+					<Title>{selectedProduct.name}</Title>
 					<Desc>
 						Lorem ipsum dolor sit amet consectetur adipisicing elit.
 						Harum asperiores exercitationem expedita autem voluptas
 						!
 					</Desc>
-					<Price>34 €</Price>
+					<Price>{selectedProduct.price} $</Price>
 					<FilterContainer>
 						<Filter>
 							<FilterTitle>Color</FilterTitle>
-							<FilterColor color="orange" />
-							<FilterColor color="lightblue" />
-							<FilterColor color="yellow" />
+
+							<FilterColor color={selectedProduct.color} />
 						</Filter>
 
 						<Filter>
 							<FilterTitle>Size</FilterTitle>
-							<FilterSize>
-								<FilterSizeOption>XS</FilterSizeOption>
+							<FilterSize onChange={HandleSizeChange}>
+								{selectedProduct.sizes
+									? selectedProduct.sizes.map((el, i) => (
+											<FilterSizeOption key={i}>
+												{el}
+											</FilterSizeOption>
+									  ))
+									: ''}
+								{/* <FilterSizeOption>XS</FilterSizeOption>
 								<FilterSizeOption>S</FilterSizeOption>
 								<FilterSizeOption>M</FilterSizeOption>
 								<FilterSizeOption>L</FilterSizeOption>
-								<FilterSizeOption>XL</FilterSizeOption>
+								<FilterSizeOption>XL</FilterSizeOption> */}
 							</FilterSize>
 						</Filter>
 					</FilterContainer>
 
 					<PurchaseContainer>
 						<AmountContainer>
-							<Icon>
-								<AddOutlinedIcon sx={{ fontSize: 25 }} />
-							</Icon>
-
-							<Amount>1</Amount>
-							<Icon>
+							<Icon onClick={DecreaseAmount}>
 								<RemoveOutlinedIcon sx={{ fontSize: 25 }} />
 							</Icon>
+							<Amount>{amount}</Amount>
+							<Icon onClick={IncreaseAmount}>
+								<AddOutlinedIcon sx={{ fontSize: 25 }} />
+							</Icon>
 						</AmountContainer>
-						<Button>ADD TO CART</Button>
+						<Button onClick={HandleAddToCart}>ADD TO CART</Button>
 					</PurchaseContainer>
 				</Right>
 			</Wrapper>

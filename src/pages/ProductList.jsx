@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { EcommerceContext } from '../context/context';
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
@@ -9,7 +9,7 @@ import Footer from '../components/Footer';
 import { mobile } from '../styles/responsive';
 import { IoOptions } from 'react-icons/io5';
 import { BiSort } from 'react-icons/bi';
-import SelectedCategoryProducts from '../components/Products';
+import Products from '../components/Products';
 
 const Container = styled.div``;
 const FilterContainer = styled.div`
@@ -39,7 +39,7 @@ const Text = styled.span`
 	})}
 `;
 const Select = styled.select`
-	height: 2rem;
+	height: 2.5rem;
 	padding: 0.5rem;
 `;
 const Option = styled.option``;
@@ -59,6 +59,19 @@ const Icon = styled.span`
 const ProductList = () => {
 	const { selectedCategory, setSelectedCategory } =
 		useContext(EcommerceContext);
+	const [color, setColor] = useState('');
+	const [size, setSize] = useState('');
+	const [sortBy, setSortBy] = useState('');
+
+	const HandleColorChange = (e) => {
+		setColor(e.target.value);
+	};
+	const HandleSizeChange = (e) => {
+		setSize(e.target.value);
+	};
+	const HandleSortBy = (e) => {
+		setSortBy(e.target.value);
+	};
 	return (
 		<Container>
 			<Navbar />
@@ -73,22 +86,19 @@ const ProductList = () => {
 							<IoOptions />
 						</Icon>
 					</FilterText>
-					<Select defaultValue={'color'}>
-						<Option value={'color'} disabled>
-							Color
-						</Option>
+					<Select onChange={HandleColorChange} defaultValue={'color'}>
+						<Option value={'color'}>Color</Option>
 						<Option>Green</Option>
 						<Option>Red</Option>
 						<Option>Blue</Option>
-						<Option>Brown</Option>
-						<Option>Rose</Option>
-						<Option>Gold</Option>
+						<Option>Yellow</Option>
+						<Option>Pink</Option>
+						<Option>Orange</Option>
 						<Option>Black</Option>
+						<Option>White</Option>
 					</Select>
-					<Select defaultValue={'size'}>
-						<Option value={'size'} disabled>
-							Size
-						</Option>
+					<Select onChange={HandleSizeChange} defaultValue={'size'}>
+						<Option value={'size'}>Size</Option>
 						<Option>XS</Option>
 						<Option>S</Option>
 						<Option>M</Option>
@@ -106,18 +116,17 @@ const ProductList = () => {
 							<BiSort />
 						</Icon>
 					</FilterText>
-					<Select defaultValue={'sort by'}>
+					<Select onChange={HandleSortBy} defaultValue={'sort by'}>
 						<Option value={'sort by'} disabled>
 							Sort By
 						</Option>
 						<Option>Popular</Option>
 						<Option>Price (up)</Option>
 						<Option>Price (down)</Option>
-						<Option>New</Option>
 					</Select>
 				</Filter>
 			</FilterContainer>
-			<SelectedCategoryProducts />
+			<Products color={color} size={size} sortBy={sortBy} />
 			<PopularProducts />
 			<Newsletter />
 			<Footer />

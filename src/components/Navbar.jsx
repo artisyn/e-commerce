@@ -151,7 +151,7 @@ const MenuContainer = styled.div`
 	transition: transform ease-out 0.5s;
 	position: absolute;
 	min-height: calc(100vh - 5rem);
-	z-index: 10;
+	z-index: 20;
 	width: 100%;
 	background-color: white;
 	top: 5rem;
@@ -189,7 +189,7 @@ const SectionCategory = styled.span`
 `;
 
 const Navbar = () => {
-	const { isAuth, loggedUser } = useContext(EcommerceContext);
+	const { isAuth, loggedUser, cartItems } = useContext(EcommerceContext);
 	const [mobSearch, setMobSearch] = useState(false);
 	const [menu, setMenu] = useState(false);
 
@@ -252,7 +252,10 @@ const Navbar = () => {
 
 					<StyledLink to={'/Cart'}>
 						<MenuCart>
-							<Badge badgeContent={4} color="primary">
+							<Badge
+								badgeContent={cartItems.length}
+								color="primary"
+							>
 								<ShoppingCartOutlinedIcon
 									style={{ fontSize: '1.6rem' }}
 									color="action"
