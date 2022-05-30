@@ -6,12 +6,15 @@ import Announcement from '../components/Announcement';
 import PopularProducts from '../components/PopularProducts';
 import Newsletter from '../components/Newsletter';
 import Footer from '../components/Footer';
-import { mobile } from '../styles/responsive';
+import { mobile, tablet } from '../styles/responsive';
 import { IoOptions } from 'react-icons/io5';
 import { BiSort } from 'react-icons/bi';
 import Products from '../components/Products';
 
-const Container = styled.div``;
+const Container = styled.div`
+	padding-top: 7rem;
+	${tablet({ paddingTop: '5rem' })}
+`;
 const FilterContainer = styled.div`
 	display: flex;
 	justify-content: space-between;

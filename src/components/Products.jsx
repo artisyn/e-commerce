@@ -41,12 +41,40 @@ const BadSearchText = styled.h2`
 
 const Products = ({ color, size, sortBy }) => {
 	const { selectedCategory } = useContext(EcommerceContext);
-	const [initialArray, setInitaialArray] = useState([
-		...AllProducts.filter((el) => el.categorie === selectedCategory),
-	]);
-	const [productArray, setProductArray] = useState([
-		...AllProducts.filter((el) => el.categorie === selectedCategory),
-	]);
+
+	const [initialArray, setInitaialArray] = useState(
+		selectedCategory === 'all'
+			? [...AllProducts]
+			: [...AllProducts.filter((el) => el.categorie === selectedCategory)]
+	);
+
+	const [productArray, setProductArray] = useState(
+		selectedCategory === 'all'
+			? [...AllProducts]
+			: [...AllProducts.filter((el) => el.categorie === selectedCategory)]
+	);
+
+	useEffect(() => {
+		setInitaialArray(
+			selectedCategory === 'all'
+				? [...AllProducts]
+				: [
+						...AllProducts.filter(
+							(el) => el.categorie === selectedCategory
+						),
+				  ]
+		);
+
+		setProductArray(
+			selectedCategory === 'all'
+				? [...AllProducts]
+				: [
+						...AllProducts.filter(
+							(el) => el.categorie === selectedCategory
+						),
+				  ]
+		);
+	}, [selectedCategory]);
 
 	useEffect(() => {
 		if (!color && !size) return;

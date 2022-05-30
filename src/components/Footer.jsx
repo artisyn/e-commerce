@@ -142,7 +142,7 @@ const PaymentImage = styled.img`
 
 const Footer = () => {
 	return (
-		<Container>
+		<Container id="footerScroll">
 			<Left>
 				<Logo>Logo.</Logo>
 				<Description>

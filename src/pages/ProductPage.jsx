@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { EcommerceContext } from '../context/context';
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
@@ -8,8 +8,14 @@ import Footer from '../components/Footer';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
 import { mobile, productCustom, tablet } from '../styles/responsive';
+import { BsHeart } from 'react-icons/bs';
+import { BsHeartFill } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
 
-const Container = styled.div``;
+const Container = styled.div`
+	padding-top: 7rem;
+	${tablet({ paddingTop: '5rem' })}
+`;
 
 const Wrapper = styled.div`
 	display: flex;
@@ -53,6 +59,51 @@ const Title = styled.h1`
 	font-weight: 300;
 	font-size: 3rem;
 	text-align: left;
+	display: flex;
+	align-items: center;
+	margin-bottom: 0;
+`;
+const WishListIcon = styled.div`
+	position: relative;
+	cursor: pointer;
+	margin-left: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 2rem;
+
+	&::after {
+		content: 'Add To Wishlist';
+		font-size: 1.2rem;
+		position: absolute;
+		right: -6rem;
+		top: -2rem;
+		color: teal;
+		display: flex;
+		width: 10rem;
+		opacity: 0;
+		transition: all ease 0.6s;
+	}
+	&:hover {
+		&::after {
+			content: 'Add To Wishlist';
+			font-size: 1.2rem;
+			position: absolute;
+			right: -6rem;
+			top: -2rem;
+			color: teal;
+			display: flex;
+			width: 10rem;
+			opacity: 1;
+		}
+	}
+`;
+const WishTextContainer = styled.div`
+	min-height: 1.5rem;
+	text-align: left;
+	width: 100%;
+	color: teal;
+	font-size: 1.2rem;
 `;
 const Desc = styled.div`
 	font-size: 1.3rem;
@@ -143,11 +194,51 @@ const Button = styled.button`
 `;
 
 const ProductPage = () => {
-	const { selectedProduct, cartItems, setCartItems } =
-		useContext(EcommerceContext);
+	const {
+		selectedProduct,
+		cartItems,
+		setCartItems,
+		isAuth,
+		wishItems,
+		setWishItems,
+	} = useContext(EcommerceContext);
+	const navigate = useNavigate();
+
+	// redirect if no selected product
+	useEffect(() => {
+		if (!selectedProduct) {
+			navigate('/Home');
+		}
+	}, []);
+
 	const [amount, setAmount] = useState(1);
-	const [size, setSize] = useState(`${selectedProduct.sizes[0]}`);
+	const [size, setSize] = useState(
+		selectedProduct ? `${selectedProduct.sizes[0]}` : ''
+	);
 	const [showMessage, setShowMessage] = useState(false);
+	const [wishMessage, setWishMessage] = useState('');
+	const [inFavorites, setInFavorites] = useState(false);
+
+	const CheckIfFavorited = (id) => {
+		if (!wishItems) return;
+		let favorited = false;
+		wishItems.forEach((item) => {
+			if (item.id === id) favorited = true;
+		});
+		return favorited;
+	};
+
+	useEffect(() => {
+		if (!CheckIfFavorited(selectedProduct.id)) {
+			setInFavorites(false);
+			return;
+		}
+
+		if (CheckIfFavorited(selectedProduct.id)) {
+			setInFavorites(true);
+			return;
+		}
+	}, [wishItems]);
 	const IncreaseAmount = () => {
 		if (amount === 20) return;
 		setAmount(amount + 1);
@@ -190,6 +281,14 @@ const ProductPage = () => {
 		]);
 		ShowTemporary();
 	};
+	const HandleWishClick = () => {
+		if (!isAuth) setWishMessage('You have to be logged in');
+		setTimeout(() => {
+			setWishMessage('');
+		}, 3000);
+		/// make this work
+		if (isAuth && !inFavorites) setWishItems();
+	};
 	return (
 		<Container>
 			<Navbar showMessage={showMessage} />
@@ -200,7 +299,13 @@ const ProductPage = () => {
 					<Image src={selectedProduct.img} />
 				</Left>
 				<Right>
-					<Title>{selectedProduct.name}</Title>
+					<Title>
+						{selectedProduct.name}
+						<WishListIcon onClick={HandleWishClick}>
+							{inFavorites ? <BsHeartFill /> : <BsHeart />}
+						</WishListIcon>
+					</Title>
+					<WishTextContainer>{wishMessage}</WishTextContainer>
 					<Desc>
 						Lorem ipsum dolor sit amet consectetur adipisicing elit.
 						Harum asperiores exercitationem expedita autem voluptas

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { mobile, userCustom } from '../styles/responsive';
+import { mobile, userCustom, tablet } from '../styles/responsive';
 import Navbar from '../components/Navbar';
 import Announcement from '../components/Announcement';
 import Newsletter from '../components/Newsletter';
@@ -10,7 +10,10 @@ import { EcommerceContext } from '../context/context';
 import { FaRegUser } from 'react-icons/fa';
 import { FaRegHeart } from 'react-icons/fa';
 
-const Container = styled.div``;
+const Container = styled.div`
+	padding-top: 7rem;
+	${tablet({ paddingTop: '5rem' })}
+`;
 
 const UserContainer = styled.div`
 	min-height: 100vh;

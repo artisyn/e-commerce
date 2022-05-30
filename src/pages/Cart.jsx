@@ -15,7 +15,10 @@ import { FaCcPaypal } from 'react-icons/fa';
 import { desktop, tablet, mobile } from '../styles/responsive';
 import { ImHappy } from 'react-icons/im';
 
-const Container = styled.div``;
+const Container = styled.div`
+	padding-top: 7rem;
+	${tablet({ paddingTop: '5rem' })}
+`;
 const Wrapper = styled.div`
 	min-height: 100vh;
 	padding: 2rem;

@@ -21,6 +21,7 @@ function App() {
 	const [selectedCategory, setSelectedCategory] = useState('');
 	const [selectedProduct, setSelectedProduct] = useState('');
 	const [checkoutPrice, setCheckoutPrice] = useState(0);
+	const [wishItems, setWishItems] = useState([]);
 
 	return (
 		<EcommerceContext.Provider

@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { tablet } from '../styles/responsive';
 import { Link } from 'react-router-dom';
 import { EcommerceContext } from '../context/context';
 import Navbar from '../components/Navbar';
@@ -13,7 +14,10 @@ import { FiUser } from 'react-icons/fi';
 import { AiOutlineEyeInvisible } from 'react-icons/ai';
 import { AiOutlineEye } from 'react-icons/ai';
 
-const Container = styled.div``;
+const Container = styled.div`
+	padding-top: 7rem;
+	${tablet({ paddingTop: '5rem' })}
+`;
 const Wrapper = styled.div`
 	min-height: 100vh;
 	padding: 2rem;

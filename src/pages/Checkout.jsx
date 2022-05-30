@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { EcommerceContext } from '../context/context';
-
+import { tablet } from '../styles/responsive';
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
 import Announcement from '../components/Announcement';
@@ -11,8 +11,13 @@ import { FaCcMastercard } from 'react-icons/fa';
 import { FaCcVisa } from 'react-icons/fa';
 import { FaRegCreditCard } from 'react-icons/fa';
 import { BiLock } from 'react-icons/bi';
+import { BsCalendarCheck } from 'react-icons/bs';
+import { MdOutlineLock } from 'react-icons/md';
 
-const Container = styled.div``;
+const Container = styled.div`
+	padding-top: 7rem;
+	${tablet({ paddingTop: '5rem' })}
+`;
 const Wrapper = styled.div`
 	min-height: 100vh;
 	display: flex;
@@ -25,14 +30,57 @@ const PaymentContainer = styled.div`
 	padding: 1rem;
 	width: 40rem;
 `;
+const TotalPriceContainer = styled.div`
+	position: relative;
+	display: flex;
+	gap: 1rem;
+	justify-content: end;
+	font-size: 1.3rem;
+	font-weight: 500;
+	align-items: center;
+	&:after {
+		content: '';
+		width: 100%;
+		height: 2px;
+		position: absolute;
+		bottom: 0;
+		background-image: linear-gradient(
+			to right,
+			#ffffff,
+			#d3dae8,
+			#9bbbcf,
+			#5a9dad,
+			#008080
+		);
+	}
+`;
+const TotalPrice = styled.span`
+	font-size: 1.5rem;
+	font-weight: bold;
+`;
 const Title = styled.h2``;
 const MethodContainer = styled.div`
+	position: relative;
 	display: flex;
 	gap: 1rem;
 	align-items: center;
 	justify-content: space-between;
-	border-bottom: 1px solid teal;
 	font-size: 1.3rem;
+	&:after {
+		content: '';
+		width: 100%;
+		height: 2px;
+		position: absolute;
+		bottom: 0;
+		background-image: linear-gradient(
+			to right,
+			#ffffff,
+			#d3dae8,
+			#9bbbcf,
+			#5a9dad,
+			#008080
+		);
+	}
 `;
 const Label = styled.label`
 	display: flex;
@@ -48,7 +96,19 @@ const LogoContainer = styled.div`
 const Logo = styled.span``;
 
 const SectionTitle = styled.h3``;
-const CardNumContainer = styled.div``;
+const CardNumContainer = styled.div`
+	position: relative;
+`;
+const SpecialIcon = styled.span`
+	position: absolute;
+	left: 0.5rem;
+	height: 100%;
+	width: 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.5rem;
+`;
 const Input = styled.input`
 	width: 100%;
 	height: 3rem;
@@ -61,6 +121,10 @@ const Input = styled.input`
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	padding-left: 3rem;
+`;
+const InputContainer = styled.div`
+	position: relative;
 `;
 const CardDetailsContainer = styled.div`
 	display: flex;
@@ -68,8 +132,12 @@ const CardDetailsContainer = styled.div`
 	align-items: center;
 	justify-content: space-between;
 `;
-const Left = styled.div``;
-const Right = styled.div``;
+const Left = styled.div`
+	position: relative;
+`;
+const Right = styled.div`
+	position: relative;
+`;
 const Message = styled.p`
 	margin-top: 2rem;
 	font-size: 1.3rem;
@@ -100,16 +168,58 @@ const Button = styled.button`
 
 const Checkout = () => {
 	const { checkoutPrice, setCheckoutPrice } = useContext(EcommerceContext);
-	const [cardValue, setCartValue] = useState('');
+	const [cardValue, setCardValue] = useState('');
+	const [sslValue, setSslValue] = useState('');
+	const [dateValue, setDateValue] = useState('');
 	const HandleCardChange = (e) => {
+		console.log(e.nativeEvent.data === ' ');
+		// if (e.nativeEvent.data === ' ') return;
 		if (
-			cardValue.length === 16 &&
+			e.target.value.length === 4 &&
 			e.nativeEvent.inputType !== 'deleteContentBackward'
 		) {
+			setCardValue(`${e.target.value} `);
 			return;
 		}
-		if (e.target.value < 0) return;
-		setCartValue(e.target.value);
+		if (
+			e.target.value.length === 9 &&
+			e.nativeEvent.inputType !== 'deleteContentBackward'
+		) {
+			setCardValue(`${e.target.value} `);
+			return;
+		}
+		if (
+			e.target.value.length === 14 &&
+			e.nativeEvent.inputType !== 'deleteContentBackward'
+		) {
+			setCardValue(`${e.target.value} `);
+			return;
+		}
+
+		if (/^[0-9\s]*$/.test(e.target.value)) {
+			setCardValue(e.target.value);
+		}
+	};
+
+	const HandleSslChange = (e) => {
+		if (e.target.value.length === 4) return;
+		if (/^[0-9]*$/.test(e.target.value)) {
+			setSslValue(e.target.value);
+		}
+	};
+	const HandleDateChange = (e) => {
+		if (e.target.value.length === 8) return;
+		if (e.target.value.length === 2 && /^[0-9]*$/.test(e.target.value)) {
+			setDateValue(`${e.target.value} / `);
+			return;
+		}
+
+		if (/^[0-9\s/]*$/.test(e.target.value)) {
+			setDateValue(e.target.value);
+		}
+	};
+	const HandleConfirm = () => {
+		console.log('Thanks for purchase');
 	};
 
 	return (
@@ -118,6 +228,10 @@ const Checkout = () => {
 			<Announcement />
 			<Wrapper>
 				<PaymentContainer>
+					<TotalPriceContainer>
+						Total Price:
+						<TotalPrice>{checkoutPrice} $</TotalPrice>
+					</TotalPriceContainer>
 					<Title>Payment Method</Title>
 					<MethodContainer>
 						<Label>
@@ -138,10 +252,13 @@ const Checkout = () => {
 					</MethodContainer>
 					<SectionTitle>Card Number</SectionTitle>
 					<CardNumContainer>
+						<SpecialIcon>
+							<FaRegCreditCard />
+						</SpecialIcon>
 						<Input
 							onChange={HandleCardChange}
 							value={cardValue}
-							type={'number'}
+							maxLength={19}
 							placeholder="000 000 000 000"
 						/>
 					</CardNumContainer>
@@ -149,18 +266,37 @@ const Checkout = () => {
 					<CardDetailsContainer>
 						<Left>
 							<SectionTitle>Expiry Date</SectionTitle>
-							<Input placeholder="00 / 00" />
+							<InputContainer>
+								<SpecialIcon>
+									<BsCalendarCheck />
+								</SpecialIcon>
+								<Input
+									onChange={HandleDateChange}
+									placeholder="00 / 00"
+									value={dateValue}
+								/>
+							</InputContainer>
 						</Left>
 						<Right>
-							<SectionTitle>CVV/CV</SectionTitle>{' '}
-							<Input placeholder="***" />
+							<SectionTitle>CVV/CV</SectionTitle>
+							<InputContainer>
+								<SpecialIcon>
+									<MdOutlineLock />
+								</SpecialIcon>
+								<Input
+									onChange={HandleSslChange}
+									placeholder="***"
+									value={sslValue}
+									type="password"
+								/>
+							</InputContainer>
 						</Right>
 					</CardDetailsContainer>
 					<Message>
 						<BiLock /> Your transaction is secured with SSL
 						encryption
 					</Message>
-					<Button>Confirm</Button>
+					<Button onClick={HandleConfirm}>Confirm</Button>
 				</PaymentContainer>
 			</Wrapper>
 			<Newsletter />

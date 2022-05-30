@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { EcommerceContext } from '../context/context';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { mobile, tablet, tabletMin } from '../styles/responsive';
@@ -10,19 +11,23 @@ import Badge from '@mui/material/Badge';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import { FaRegUser } from 'react-icons/fa';
+import Footer from '../components/Footer';
 
 const StyledLink = styled(Link)`
 	text-decoration: none;
 	color: black;
 `;
 const Container = styled.div`
-	position: relative;
-	border: 1px solid black;
+	z-index: 100;
+	position: fixed;
+	top: 0;
+	/* border: 1px solid black; */
 	min-height: 5rem;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	width: 100%;
+	background-color: white;
 `;
 const Wrapper = styled.div`
 	height: 5rem;
@@ -208,11 +213,46 @@ const SectionCategory = styled.span`
 		color: black;
 	}
 `;
+const LowerMenu = styled.div`
+	${tablet({ display: 'none' })}
+	height: 2rem;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;
+const LowerMenuItem = styled.div`
+	font-size: 1.2rem;
+	font-weight: 500;
+	cursor: pointer;
+	color: black;
+	transition: color ease 0.5s;
+	&:hover {
+		color: grey;
+	}
+`;
 
-const Navbar = ({ showMessage }) => {
-	const { isAuth, loggedUser, cartItems } = useContext(EcommerceContext);
+const Separator = styled.span`
+	margin-left: 1rem;
+	margin-right: 1rem;
+`;
+
+const Navbar = ({ showMessage, footerRef }) => {
+	const {
+		isAuth,
+		loggedUser,
+		cartItems,
+		selectedCategory,
+		setSelectedCategory,
+	} = useContext(EcommerceContext);
+	const navigate = useNavigate();
 	const [mobSearch, setMobSearch] = useState(false);
 	const [menu, setMenu] = useState(false);
+
+	const handleShopNow = (title) => {
+		setSelectedCategory(title.toLowerCase());
+		navigate('/ProductList');
+	};
 
 	const handleMobileSearch = () => {
 		setMenu(false);
@@ -227,6 +267,11 @@ const Navbar = ({ showMessage }) => {
 		if (!menu) document.querySelector('.App').style.overflowY = 'hidden';
 		if (menu) document.body.style.position = 'static';
 		if (menu) document.querySelector('.App').style.overfloY = 'visible';
+	};
+	const handleClickFooter = () => {
+		document
+			.getElementById('footerScroll')
+			.scrollIntoView({ behavior: 'smooth' });
 	};
 
 	return (
@@ -342,6 +387,31 @@ const Navbar = ({ showMessage }) => {
 					</SectionItem>
 				</MobileSection>
 			</MenuContainer>
+			<LowerMenu>
+				<StyledLink to={'/Home'}>
+					<LowerMenuItem>Home</LowerMenuItem>
+				</StyledLink>
+				<Separator>/</Separator>
+				<LowerMenuItem onClick={() => handleShopNow('all')}>
+					All Categories
+				</LowerMenuItem>
+				<Separator>/</Separator>
+				<LowerMenuItem onClick={() => handleShopNow('sneakers')}>
+					Sneakers
+				</LowerMenuItem>
+				<Separator>/</Separator>
+				<LowerMenuItem onClick={() => handleShopNow('shirts')}>
+					Shirts
+				</LowerMenuItem>
+				<Separator>/</Separator>
+				<LowerMenuItem onClick={() => handleShopNow('headwear')}>
+					Headwear
+				</LowerMenuItem>
+				<Separator>/</Separator>
+				<LowerMenuItem onClick={handleClickFooter}>
+					Footer
+				</LowerMenuItem>
+			</LowerMenu>
 		</Container>
 	);
 };
