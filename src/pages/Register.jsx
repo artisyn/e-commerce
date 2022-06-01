@@ -250,6 +250,7 @@ const Register = () => {
 			name: `${name}`,
 			password: `${password}`,
 			email: `${email}`,
+			wishlist: [],
 		};
 
 		setUsers([...users, user]);

@@ -63,7 +63,7 @@ const Title = styled.h1`
 	align-items: center;
 	margin-bottom: 0;
 `;
-const WishListIcon = styled.div`
+const WishListIconAdd = styled.div`
 	position: relative;
 	cursor: pointer;
 	margin-left: 1rem;
@@ -71,10 +71,11 @@ const WishListIcon = styled.div`
 	align-items: center;
 	justify-content: center;
 	font-size: 2rem;
+	color: teal;
 
 	&::after {
-		content: 'Add To Wishlist';
-		font-size: 1.2rem;
+		content: 'Add to Wishlist';
+		font-size: 1rem;
 		position: absolute;
 		right: -6rem;
 		top: -2rem;
@@ -86,8 +87,44 @@ const WishListIcon = styled.div`
 	}
 	&:hover {
 		&::after {
-			content: 'Add To Wishlist';
-			font-size: 1.2rem;
+			content: 'Add to Wishlist';
+			font-size: 1rem;
+			position: absolute;
+			right: -6rem;
+			top: -2rem;
+			color: teal;
+			display: flex;
+			width: 10rem;
+			opacity: 1;
+		}
+	}
+`;
+const WishListIconRemove = styled.div`
+	position: relative;
+	cursor: pointer;
+	margin-left: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 2rem;
+	color: teal;
+
+	&::after {
+		content: 'Remove from Wishlist';
+		font-size: 1rem;
+		position: absolute;
+		right: -6rem;
+		top: -2rem;
+		color: teal;
+		display: flex;
+		width: 10rem;
+		opacity: 0;
+		transition: all ease 0.6s;
+	}
+	&:hover {
+		&::after {
+			content: 'Remove from Wishlist';
+			font-size: 1rem;
 			position: absolute;
 			right: -6rem;
 			top: -2rem;
@@ -199,8 +236,10 @@ const ProductPage = () => {
 		cartItems,
 		setCartItems,
 		isAuth,
-		wishItems,
-		setWishItems,
+		users,
+		setUsers,
+		loggedUser,
+		setLoggedUser,
 	} = useContext(EcommerceContext);
 	const navigate = useNavigate();
 
@@ -219,26 +258,82 @@ const ProductPage = () => {
 	const [wishMessage, setWishMessage] = useState('');
 	const [inFavorites, setInFavorites] = useState(false);
 
-	const CheckIfFavorited = (id) => {
-		if (!wishItems) return;
-		let favorited = false;
-		wishItems.forEach((item) => {
-			if (item.id === id) favorited = true;
-		});
+	const CheckIfFavorited = (product) => {
+		if (!isAuth) return;
+		let favorited = true;
+		const userIndex = users.findIndex(
+			(el) => el.email === loggedUser.email
+		);
+		const favoritedItemIndex = users[userIndex]?.wishlist.findIndex(
+			(el) => el.id === product.id
+		);
+
+		// check if user has item in favorites
+		if (favoritedItemIndex === -1) {
+			favorited = false;
+			// updating current users favorites;
+			return favorited;
+		}
+
 		return favorited;
+	};
+	const AddRemoveFromFavorites = (product) => {
+		if (!isAuth) return;
+		const isFavorited = CheckIfFavorited(product);
+		const userIndex = users.findIndex(
+			(el) => el.email === loggedUser.email
+		);
+		const favoritedItemIndex = users[userIndex].wishlist.findIndex(
+			(el) => el.id === product.id
+		);
+
+		if (isFavorited) {
+			// delete from favorites
+			let tempObj = { ...users[userIndex] };
+			let tempWishlist = [...tempObj.wishlist];
+			tempWishlist.splice(favoritedItemIndex, 1);
+			tempObj.wishlist = tempWishlist;
+			setLoggedUser({ ...tempObj });
+			let newUsers = [...users];
+			newUsers[userIndex] = tempObj;
+			setUsers([...newUsers]);
+
+			return;
+		}
+
+		if (!isFavorited) {
+			// add to favorites
+			let tempObj = { ...users[userIndex] };
+			tempObj.wishlist.push({
+				id: product.id,
+				img: product.img,
+				name: product.name,
+				size: size,
+				color: product.color,
+				price: product.price,
+			});
+			setLoggedUser({ ...tempObj });
+			let newUsers = [...users];
+			newUsers[userIndex] = tempObj;
+			setUsers([...newUsers]);
+			return;
+		}
 	};
 
 	useEffect(() => {
-		if (!CheckIfFavorited(selectedProduct.id)) {
+		if (!isAuth) return;
+		if (!CheckIfFavorited(selectedProduct)) {
 			setInFavorites(false);
 			return;
 		}
 
-		if (CheckIfFavorited(selectedProduct.id)) {
+		if (CheckIfFavorited(selectedProduct)) {
+			if (!isAuth) return;
+
 			setInFavorites(true);
 			return;
 		}
-	}, [wishItems]);
+	}, [users]);
 	const IncreaseAmount = () => {
 		if (amount === 20) return;
 		setAmount(amount + 1);
@@ -287,7 +382,9 @@ const ProductPage = () => {
 			setWishMessage('');
 		}, 3000);
 		/// make this work
-		if (isAuth && !inFavorites) setWishItems();
+		if (isAuth) {
+			AddRemoveFromFavorites(selectedProduct);
+		}
 	};
 	return (
 		<Container>
@@ -301,9 +398,16 @@ const ProductPage = () => {
 				<Right>
 					<Title>
 						{selectedProduct.name}
-						<WishListIcon onClick={HandleWishClick}>
-							{inFavorites ? <BsHeartFill /> : <BsHeart />}
-						</WishListIcon>
+
+						{!inFavorites ? (
+							<WishListIconAdd onClick={HandleWishClick}>
+								<BsHeart />
+							</WishListIconAdd>
+						) : (
+							<WishListIconRemove onClick={HandleWishClick}>
+								<BsHeartFill />
+							</WishListIconRemove>
+						)}
 					</Title>
 					<WishTextContainer>{wishMessage}</WishTextContainer>
 					<Desc>

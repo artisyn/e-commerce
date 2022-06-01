@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { EcommerceContext } from '../context/context';
 import styled from 'styled-components';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -7,7 +8,16 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import { desktop, tablet, tabletMin, mobile } from '../styles/responsive';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
+const StyledLink = styled(Link)`
+	text-decoration: none;
+	color: black;
+	&:hover {
+		color: gray;
+	}
+`;
 const Container = styled.div`
 	min-height: 22rem;
 	padding: 1rem;
@@ -141,6 +151,13 @@ const PaymentImage = styled.img`
 `;
 
 const Footer = () => {
+	const { selectedCategory, setSelectedCategory } =
+		useContext(EcommerceContext);
+	const navigate = useNavigate();
+	const handleShopNow = (title) => {
+		setSelectedCategory(title.toLowerCase());
+		navigate('/ProductList');
+	};
 	return (
 		<Container id="footerScroll">
 			<Left>
@@ -166,15 +183,30 @@ const Footer = () => {
 			<Center>
 				<Title> Useful Links </Title>
 				<List>
-					<ListItem>Home</ListItem>
-					<ListItem>Cart</ListItem>
-					<ListItem>Man Fashion</ListItem>
-					<ListItem>Woman Fashion</ListItem>
-					<ListItem>Accessories</ListItem>
-					<ListItem>My Account</ListItem>
-					<ListItem>Order Tracking</ListItem>
-					<ListItem>Wishlist</ListItem>
-					<ListItem>Terms</ListItem>
+					<ListItem>
+						<StyledLink to={'/Home'}>Home</StyledLink>
+					</ListItem>
+					<ListItem onClick={() => handleShopNow('all')}>
+						All Categories
+					</ListItem>
+					<ListItem onClick={() => handleShopNow('sneakers')}>
+						Sneakers
+					</ListItem>
+					<ListItem onClick={() => handleShopNow('shirts')}>
+						Shirts
+					</ListItem>
+					<ListItem onClick={() => handleShopNow('headwear')}>
+						Headwear
+					</ListItem>
+					<ListItem onClick={() => handleShopNow('hoodie')}>
+						Hoodies
+					</ListItem>
+					<ListItem>
+						<StyledLink to={'/Register'}>Register</StyledLink>
+					</ListItem>
+					<ListItem>
+						<StyledLink to={'/Login'}>Sign In</StyledLink>
+					</ListItem>
 				</List>
 			</Center>
 			<Right>

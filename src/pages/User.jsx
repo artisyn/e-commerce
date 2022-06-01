@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { mobile, userCustom, tablet } from '../styles/responsive';
@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import Announcement from '../components/Announcement';
 import Newsletter from '../components/Newsletter';
 import Footer from '../components/Footer';
+import WishItem from '../components/WishItem';
 import { EcommerceContext } from '../context/context';
 import { FaRegUser } from 'react-icons/fa';
 import { FaRegHeart } from 'react-icons/fa';
@@ -128,27 +129,89 @@ const WishList = styled.div`
 	flex-wrap: wrap;
 	padding: 1rem;
 `;
-const WishListItem = styled.div`
-	height: 6rem;
-	width: 6rem;
-	border-radius: 50%;
-	overflow: hidden;
-	background-color: white;
+
+const PasswordChangeMessage = styled.div`
+	letter-spacing: 0.05rem;
+	color: teal;
+	min-height: 1.2rem;
 `;
-const WishPicture = styled.img`
-	max-height: 100%;
-	object-fit: cover;
-	object-position: center;
+const EmailChangeMessage = styled.div`
+	letter-spacing: 0.05rem;
+	color: teal;
+	min-height: 1.2rem;
 `;
 
 const User = () => {
 	const { users, setUsers, loggedUser, setLoggedUser, isAuth, setIsAuth } =
 		useContext(EcommerceContext);
 	const navigate = useNavigate();
+	const [password, setPassword] = useState('');
+	const [email, setEmail] = useState('');
+	const [emailMessage, setEmailMessage] = useState('');
+	const [passwordMessage, setPasswordMessage] = useState('');
 
 	const HandleSignOut = () => {
 		setIsAuth(false);
 		navigate('/home');
+	};
+	const HandleClear = () => {
+		const userIndex = users.findIndex(
+			(el) => el.email === loggedUser.email
+		);
+		// delete all favorites
+		let tempObj = { ...users[userIndex] };
+		tempObj.wishlist = [];
+		setLoggedUser({ ...tempObj });
+		let newUsers = [...users];
+		newUsers[userIndex] = tempObj;
+		setUsers([...newUsers]);
+
+		return;
+	};
+
+	const HandlePasswordValue = (e) => {
+		setPassword(e.target.value);
+	};
+	const HandleEmailValue = (e) => {
+		setEmail(e.target.value);
+	};
+
+	const HandleChangePassword = () => {
+		if (password.length === 0) {
+			setPasswordMessage('Enter new Password');
+			return;
+		}
+		const userIndex = users.findIndex(
+			(el) => el.email === loggedUser.email
+		);
+		// change password
+		let tempObj = { ...users[userIndex] };
+		tempObj.password = password;
+		setLoggedUser({ ...tempObj });
+		let newUsers = [...users];
+		newUsers[userIndex] = tempObj;
+		setUsers([...newUsers]);
+
+		setPassword('');
+		setPasswordMessage('Password Changed Successfully');
+	};
+	const HandleEmailChange = () => {
+		if (email.length === 0) {
+			setEmailMessage('Enter new Email');
+			return;
+		}
+		const userIndex = users.findIndex(
+			(el) => el.email === loggedUser.email
+		);
+		// change email
+		let tempObj = { ...users[userIndex] };
+		tempObj.email = email;
+		setLoggedUser({ ...tempObj });
+		let newUsers = [...users];
+		newUsers[userIndex] = tempObj;
+		setUsers([...newUsers]);
+		setEmail('');
+		setEmailMessage('Email Changed Successfully');
 	};
 
 	return (
@@ -171,18 +234,36 @@ const User = () => {
 								<MiddleLine />
 							</Separator>
 							<OptionsContainer>
-								<Input placeholder="New Password" />
-								<Button>Change</Button>
+								<Input
+									placeholder="New Password"
+									value={password}
+									onChange={HandlePasswordValue}
+								/>
+								<Button onClick={HandleChangePassword}>
+									Change
+								</Button>
 							</OptionsContainer>
+							<PasswordChangeMessage>
+								{passwordMessage}
+							</PasswordChangeMessage>
 							<Separator>
 								<MiddleLine />
 								<SeparatorText>Change Email</SeparatorText>
 								<MiddleLine />
 							</Separator>
 							<OptionsContainer>
-								<Input placeholder="New Email" />
-								<Button>Change</Button>
+								<Input
+									placeholder="New Email"
+									value={email}
+									onChange={HandleEmailValue}
+								/>
+								<Button onClick={HandleEmailChange}>
+									Change
+								</Button>
 							</OptionsContainer>
+							<EmailChangeMessage>
+								{emailMessage}
+							</EmailChangeMessage>
 							<Separator>
 								<MiddleLine />
 								<SeparatorText>Sign Out</SeparatorText>
@@ -205,15 +286,18 @@ const User = () => {
 								<SeparatorText>Wishlist</SeparatorText>
 								<MiddleLine />
 							</Separator>
+							{loggedUser.wishlist.length === 0 ? (
+								<h2 style={{ textAlign: 'center' }}>
+									Explore Our Shop for Happiness !
+								</h2>
+							) : (
+								<WishList>
+									{loggedUser.wishlist.map((el) => (
+										<WishItem key={el.id} item={el} />
+									))}
+								</WishList>
+							)}
 
-							<WishList>
-								<WishListItem>
-									<WishPicture src="https://images.unsplash.com/photo-1521369909029-2afed882baee?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470" />
-								</WishListItem>
-								<WishListItem>
-									<WishPicture src="https://images.unsplash.com/photo-1574368822296-1dfd47114b1c?ixlib=rb-1.2.1&raw_url=true&q=80&fm=jpg&crop=entropy&cs=tinysrgb&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476"></WishPicture>
-								</WishListItem>
-							</WishList>
 							<Separator>
 								<MiddleLine />
 								<SeparatorText>Clear Wishlist</SeparatorText>
@@ -221,7 +305,7 @@ const User = () => {
 							</Separator>
 
 							<OptionsContainer>
-								<Button>Clear</Button>
+								<Button onClick={HandleClear}>Clear</Button>
 							</OptionsContainer>
 						</RightWrapper>
 					</Wrapper>

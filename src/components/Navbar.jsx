@@ -220,6 +220,7 @@ const LowerMenu = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	background-color: #e4e3e3;
 `;
 const LowerMenuItem = styled.div`
 	font-size: 1.2rem;
@@ -406,6 +407,10 @@ const Navbar = ({ showMessage, footerRef }) => {
 				<Separator>/</Separator>
 				<LowerMenuItem onClick={() => handleShopNow('headwear')}>
 					Headwear
+				</LowerMenuItem>
+				<Separator>/</Separator>
+				<LowerMenuItem onClick={() => handleShopNow('hoodie')}>
+					Hoodies
 				</LowerMenuItem>
 				<Separator>/</Separator>
 				<LowerMenuItem onClick={handleClickFooter}>

@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { EcommerceContext } from '../context/context';
 import { AllProducts } from '../data';
 import CategoryProduct from './Product';
+import { mobile } from '../styles/responsive';
+import PaginationNumbers from './PaginationNumbers';
 
 const Container = styled.div`
 	width: 100%;
@@ -38,10 +40,50 @@ const BadSearchText = styled.h2`
 	letter-spacing: 0.06rem;
 	border-bottom: 2px solid teal;
 `;
+const Pagination = styled.div`
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+`;
+const PageButton = styled.button`
+	width: 8rem;
+	height: 3rem;
+	background-color: teal;
+	border: 1px soid black;
+	outline: none;
+	padding: 1rem 2rem;
+	color: white;
+	font-size: 1.4rem;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: background ease 0.3s;
+
+	&:hover {
+		background-color: black;
+	}
+
+	${mobile({
+		fontSize: '1.2rem',
+		padding: '1rem 1.5rem',
+	})}
+`;
+const NumContainer = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.3rem;
+`;
 
 const Products = ({ color, size, sortBy }) => {
 	const { selectedCategory } = useContext(EcommerceContext);
-
+	const [totalProductsPerPage, setTotalProductsPerPage] = useState(8);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [totalPages, setTotalPages] = useState([1, 2, 3, 4, 5]);
 	const [initialArray, setInitaialArray] = useState(
 		selectedCategory === 'all'
 			? [...AllProducts]
@@ -53,6 +95,8 @@ const Products = ({ color, size, sortBy }) => {
 			? [...AllProducts]
 			: [...AllProducts.filter((el) => el.categorie === selectedCategory)]
 	);
+
+	const [paginatedArray, setPaginatedArray] = useState([]);
 
 	useEffect(() => {
 		setInitaialArray(
@@ -75,6 +119,32 @@ const Products = ({ color, size, sortBy }) => {
 				  ]
 		);
 	}, [selectedCategory]);
+
+	// setPaginatedArray();
+
+	const HandlePagination = (array) => {
+		const allPages = array.length / totalProductsPerPage;
+		if (allPages <= 1) return array;
+		// pagination;
+		if (allPages > 1) {
+			setTotalPages(allPages);
+		}
+	};
+	const TotalPagesArray = () => {
+		let arr = [];
+		for (let i = 0; i < totalPages; i++) {
+			arr.push(i + 1);
+		}
+		return arr;
+	};
+	const HandleNextPage = () => {
+		if (currentPage === totalPages.length) return;
+		setCurrentPage(currentPage + 1);
+	};
+	const HandlePrevPage = () => {
+		if (currentPage === 1) return;
+		setCurrentPage(currentPage - 1);
+	};
 
 	useEffect(() => {
 		if (!color && !size) return;
@@ -130,6 +200,8 @@ const Products = ({ color, size, sortBy }) => {
 		}
 	}, [sortBy]);
 
+	// Pagination
+
 	return (
 		<Container>
 			<ProductsWrapper>
@@ -144,6 +216,20 @@ const Products = ({ color, size, sortBy }) => {
 						</BadSearchText>
 					</BadSearch>
 				)}
+				<Pagination>
+					<PageButton onClick={HandlePrevPage}>Prev</PageButton>
+					<NumContainer>
+						{totalPages.map((el) => (
+							<PaginationNumbers
+								key={el}
+								currentPage={currentPage}
+								num={el}
+								setCurrentPage={setCurrentPage}
+							/>
+						))}
+					</NumContainer>
+					<PageButton onClick={HandleNextPage}>Next</PageButton>
+				</Pagination>
 			</ProductsWrapper>
 		</Container>
 	);

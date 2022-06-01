@@ -14,14 +14,18 @@ import PageRoutes from './routes/PageRoutes';
 function App() {
 	const [cartItems, setCartItems] = useState([]);
 	const [users, setUsers] = useState([
-		{ name: 'User1', password: 'Qwertyqwerty1', email: 'user1@mail.com' },
+		{
+			name: 'User1',
+			password: 'Qwertyqwerty1',
+			email: 'user1@mail.com',
+			wishlist: [],
+		},
 	]);
 	const [isAuth, setIsAuth] = useState(false);
 	const [loggedUser, setLoggedUser] = useState({});
 	const [selectedCategory, setSelectedCategory] = useState('');
 	const [selectedProduct, setSelectedProduct] = useState('');
 	const [checkoutPrice, setCheckoutPrice] = useState(0);
-	const [wishItems, setWishItems] = useState([]);
 
 	return (
 		<EcommerceContext.Provider
