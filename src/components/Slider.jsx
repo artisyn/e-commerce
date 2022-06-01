@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { EcommerceContext } from '../context/context';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { tablet } from '../styles/responsive';
 import { sliderItems } from '../data';
@@ -75,11 +77,18 @@ const Button = styled.button`
 	padding: 0.7rem;
 	font-size: 1.5rem;
 	background-color: transparent;
+	transition: all ease 0.5s;
 	cursor: pointer;
+	&:hover {
+		background-color: #ffffff8a;
+	}
 `;
 
 const Slider = () => {
 	const [slideIndex, setSlideIndex] = useState(0);
+	const { selectedCategory, setSelectedCategory } =
+		useContext(EcommerceContext);
+	const navigate = useNavigate();
 
 	const handleClick = (dir) => {
 		if (dir === 'left') {
@@ -92,6 +101,10 @@ const Slider = () => {
 				slideIndex < sliderItems.length - 1 ? slideIndex + 1 : 0
 			);
 		}
+	};
+	const HandleShopNow = (title) => {
+		setSelectedCategory(title.toLowerCase());
+		navigate('/ProductList');
 	};
 	return (
 		<Container>
@@ -107,7 +120,9 @@ const Slider = () => {
 						<InfoContainer>
 							<Title>{item.title}</Title>
 							<Description>{item.desc}</Description>
-							<Button>SHOP NOW</Button>
+							<Button onClick={() => HandleShopNow('all')}>
+								SHOP NOW
+							</Button>
 						</InfoContainer>
 					</Slide>
 				))}
