@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Product from './PopularProduct';
-import { popularProducts } from '../data';
+import { popProductsAmount, AllProducts } from '../data';
 
 const Container = styled.div`
 	width: 100%;
@@ -23,15 +23,44 @@ const ProductsWrapper = styled.div`
 `;
 
 const PopularProducts = () => {
+	const CreateIArr = (num, arr, rndArr) => {
+		let maxLength = num;
+		let rnd = Math.floor(Math.random() * AllProducts.length);
+		let array = [...arr];
+		let randomArray = [...rndArr];
+		if (array.length === maxLength) return array;
+		if (randomArray.includes(rnd))
+			return CreateIArr(maxLength, array, randomArray);
+		randomArray.push(rnd);
+		array = [...array, rnd];
+		return CreateIArr(maxLength, array, randomArray);
+	};
+
+	const [randomIArr, setRandomIArr] = useState(
+		CreateIArr(popProductsAmount, [], [])
+	);
+
+	const [popularArray, setPopularArray] = useState([
+		...randomIArr.reduce((acu, el) => {
+			return [...acu, AllProducts[el]];
+		}, []),
+	]);
+
 	return (
-		<Container>
-			<Title>Popular Products</Title>
-			<ProductsWrapper>
-				{popularProducts.map((product) => (
-					<Product key={product.id} product={product} />
-				))}
-			</ProductsWrapper>
-		</Container>
+		<>
+			{popularArray.length === 0 ? (
+				<h2>No Popular Products</h2>
+			) : (
+				<Container>
+					<Title>Popular Products</Title>
+					<ProductsWrapper>
+						{popularArray.map((product) => (
+							<Product key={product.id} product={product} />
+						))}
+					</ProductsWrapper>
+				</Container>
+			)}
+		</>
 	);
 };
 

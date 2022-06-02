@@ -381,7 +381,7 @@ const ProductPage = () => {
 		setTimeout(() => {
 			setWishMessage('');
 		}, 3000);
-		/// make this work
+
 		if (isAuth) {
 			AddRemoveFromFavorites(selectedProduct);
 		}

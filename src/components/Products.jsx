@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { EcommerceContext } from '../context/context';
 import { AllProducts } from '../data';
 import CategoryProduct from './Product';
-import { mobile } from '../styles/responsive';
+import { mobile, tablet } from '../styles/responsive';
 import PaginationNumbers from './PaginationNumbers';
 
 const Container = styled.div`
@@ -40,18 +40,21 @@ const BadSearchText = styled.h2`
 	letter-spacing: 0.06rem;
 	border-bottom: 2px solid teal;
 `;
+
 const Pagination = styled.div`
+	margin: 2rem 0 2rem 0;
 	width: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 1rem;
+	gap: 2rem;
+	background-color: #e4e3e3;
 `;
 const PageButton = styled.button`
+	border: none;
 	width: 8rem;
 	height: 3rem;
 	background-color: teal;
-	border: 1px soid black;
 	outline: none;
 	padding: 1rem 2rem;
 	color: white;
@@ -67,9 +70,8 @@ const PageButton = styled.button`
 		background-color: black;
 	}
 
-	${mobile({
-		fontSize: '1.2rem',
-		padding: '1rem 1.5rem',
+	${tablet({
+		display: 'none',
 	})}
 `;
 const NumContainer = styled.div`
@@ -83,7 +85,7 @@ const Products = ({ color, size, sortBy }) => {
 	const { selectedCategory } = useContext(EcommerceContext);
 	const [totalProductsPerPage, setTotalProductsPerPage] = useState(8);
 	const [currentPage, setCurrentPage] = useState(1);
-	const [totalPages, setTotalPages] = useState([1, 2, 3, 4, 5]);
+
 	const [initialArray, setInitaialArray] = useState(
 		selectedCategory === 'all'
 			? [...AllProducts]
@@ -96,8 +98,37 @@ const Products = ({ color, size, sortBy }) => {
 			: [...AllProducts.filter((el) => el.categorie === selectedCategory)]
 	);
 
-	const [paginatedArray, setPaginatedArray] = useState([]);
+	const CalculatePages = (arr, amount) => {
+		if (arr === amount) return 1;
+		if (arr < amount) return 1;
+		if (arr > amount && arr % amount === 0) return Math.floor(arr / amount);
+		if (arr > amount) return Math.floor(arr / amount) + 1;
+	};
+	// get total pages number
+	const [totalPages, setTotalPages] = useState(
+		CalculatePages(productArray.length, totalProductsPerPage)
+	);
+	// update every time productArray changes
+	useEffect(() => {
+		setTotalPages(
+			CalculatePages(productArray.length, totalProductsPerPage)
+		);
+	}, [productArray]);
 
+	const TotalPagesArray = () => {
+		let arr = [];
+		for (let i = 0; i < totalPages; i++) {
+			arr.push(i + 1);
+		}
+		return arr;
+	};
+
+	// create array for page numbers
+	const [pageNumbers, setPageNumbers] = useState(TotalPagesArray);
+	// update every time totalPages changes
+	useEffect(() => {
+		setPageNumbers(TotalPagesArray);
+	}, [totalPages]);
 	useEffect(() => {
 		setInitaialArray(
 			selectedCategory === 'all'
@@ -122,34 +153,36 @@ const Products = ({ color, size, sortBy }) => {
 
 	// setPaginatedArray();
 
-	const HandlePagination = (array) => {
-		const allPages = array.length / totalProductsPerPage;
-		if (allPages <= 1) return array;
-		// pagination;
-		if (allPages > 1) {
-			setTotalPages(allPages);
-		}
-	};
-	const TotalPagesArray = () => {
-		let arr = [];
-		for (let i = 0; i < totalPages; i++) {
-			arr.push(i + 1);
-		}
-		return arr;
-	};
 	const HandleNextPage = () => {
-		if (currentPage === totalPages.length) return;
+		if (currentPage === totalPages) return;
 		setCurrentPage(currentPage + 1);
+		window.scrollTo({
+			top: 0,
+			behavior: 'smooth',
+		});
 	};
 	const HandlePrevPage = () => {
 		if (currentPage === 1) return;
 		setCurrentPage(currentPage - 1);
+		window.scrollTo({
+			top: 0,
+			behavior: 'smooth',
+		});
+	};
+
+	const HandlePageChange = (el) => {
+		setCurrentPage(el);
+		window.scrollTo({
+			top: 0,
+			behavior: 'smooth',
+		});
 	};
 
 	useEffect(() => {
 		if (!color && !size) return;
+
 		const HandleFilter = (color1, size1) => {
-			let filteredArr;
+			let filteredArr = [...initialArray];
 
 			const color = color1;
 			const size = size1;
@@ -167,6 +200,7 @@ const Products = ({ color, size, sortBy }) => {
 			}
 			// then sort by size
 			if (size && size !== 'size') {
+				console.log(filteredArr);
 				filteredArr = filteredArr.filter((el) =>
 					el.sizes.includes(size)
 				);
@@ -201,12 +235,38 @@ const Products = ({ color, size, sortBy }) => {
 	}, [sortBy]);
 
 	// Pagination
+	const HandlePagination = (array) => {
+		if (totalPages <= 1) return array;
+		// pagination;
+		if (totalPages > 1) {
+			if (currentPage === totalPages) {
+				const start =
+					currentPage * totalProductsPerPage - totalProductsPerPage;
+				const end = productArray.length;
+				return [...productArray.slice(start, end)];
+			}
+			const start =
+				currentPage * totalProductsPerPage - totalProductsPerPage;
+			const end = currentPage * totalProductsPerPage;
+
+			return [...productArray.slice(start, end)];
+		}
+	};
+
+	// creating paginated array
+	const [paginatedArray, setPaginatedArray] = useState(
+		HandlePagination(productArray)
+	);
+	// updating paginated array
+	useEffect(() => {
+		setPaginatedArray(HandlePagination(productArray));
+	}, [currentPage, productArray]);
 
 	return (
 		<Container>
 			<ProductsWrapper>
 				{productArray.length !== 0 ? (
-					productArray.map((product) => (
+					paginatedArray.map((product) => (
 						<CategoryProduct key={product.id} product={product} />
 					))
 				) : (
@@ -216,21 +276,21 @@ const Products = ({ color, size, sortBy }) => {
 						</BadSearchText>
 					</BadSearch>
 				)}
-				<Pagination>
-					<PageButton onClick={HandlePrevPage}>Prev</PageButton>
-					<NumContainer>
-						{totalPages.map((el) => (
-							<PaginationNumbers
-								key={el}
-								currentPage={currentPage}
-								num={el}
-								setCurrentPage={setCurrentPage}
-							/>
-						))}
-					</NumContainer>
-					<PageButton onClick={HandleNextPage}>Next</PageButton>
-				</Pagination>
 			</ProductsWrapper>
+			<Pagination>
+				<PageButton onClick={HandlePrevPage}>Prev</PageButton>
+				<NumContainer>
+					{pageNumbers.map((el) => (
+						<PaginationNumbers
+							key={el}
+							currentPage={currentPage}
+							num={el}
+							setCurrentPage={HandlePageChange}
+						/>
+					))}
+				</NumContainer>
+				<PageButton onClick={HandleNextPage}>Next</PageButton>
+			</Pagination>
 		</Container>
 	);
 };

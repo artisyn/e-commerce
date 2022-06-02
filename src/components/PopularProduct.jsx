@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { EcommerceContext } from '../context/context';
+import { useNavigate } from 'react-router-dom';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+
 const Info = styled.div`
 	position: absolute;
 	width: 100%;
@@ -58,18 +59,20 @@ const Icon = styled.div`
 `;
 
 const PopularProduct = ({ product }) => {
+	const { selectedProduct, setSelectedProduct } =
+		useContext(EcommerceContext);
+	const navigate = useNavigate();
+	const HandleClick = (product) => {
+		setSelectedProduct(product);
+		navigate(`/ProductPage/${product.id}`);
+	};
+
 	return (
 		<Container>
 			<Image src={product.img} />
 			<Info>
-				<Icon>
-					<ShoppingCartOutlinedIcon />
-				</Icon>
-				<Icon>
+				<Icon onClick={() => HandleClick(product)}>
 					<SearchOutlinedIcon />
-				</Icon>
-				<Icon>
-					<FavoriteBorderOutlinedIcon />
 				</Icon>
 			</Info>
 		</Container>

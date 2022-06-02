@@ -43,55 +43,23 @@ export const categories = [
 		title: 'SHIRTS',
 	},
 	{
-		id: 3,
+		id: 2,
 		img: 'https://images.unsplash.com/photo-1556906781-9a412961c28c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
 		title: 'SNEAKERS',
 	},
 	{
-		id: 4,
+		id: 3,
 		img: 'https://images.unsplash.com/photo-1587024807662-8735eb7a74fc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=743&q=80',
 		title: 'HEADWEAR',
 	},
-];
-
-export const popularProducts = [
-	{
-		id: 1,
-		img: 'https://images.unsplash.com/photo-1556306535-0f09a537f0a3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-	},
-	{
-		id: 2,
-		img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80',
-	},
-	{
-		id: 3,
-		img: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1372&q=80',
-	},
 	{
 		id: 4,
-		img: 'https://images.unsplash.com/photo-1497339100210-9e87df79c218?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-	},
-	{
-		id: 5,
-		img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
-	},
-	{
-		id: 6,
-		img: 'https://www.pngall.com/wp-content/uploads/12/Garment-No-Background.png',
-	},
-	{
-		id: 7,
-		img: 'https://www.pngall.com/wp-content/uploads/12/Garment-PNG-Photo.png',
-	},
-	{
-		id: 8,
-		img: 'https://www.pngall.com/wp-content/uploads/12/Garment-PNG-File.png',
-	},
-	{
-		id: 9,
-		img: 'https://www.pngall.com/wp-content/uploads/12/Fashion-Garment.png',
+		img: 'https://images.unsplash.com/photo-1509942774463-acf339cf87d5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
+		title: 'HOODIES',
 	},
 ];
+
+export const popProductsAmount = 10;
 
 export const AllProducts = [
 	{
@@ -367,7 +335,7 @@ export const AllProducts = [
 	{
 		id: 31,
 		img: 'https://images.unsplash.com/photo-1579572331145-5e53b299c64e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=680&q=80',
-		categorie: 'hoodie',
+		categorie: 'hoodies',
 		name: 'Cute Hoodie 1',
 		price: 40,
 		color: 'grey',
@@ -376,7 +344,7 @@ export const AllProducts = [
 	{
 		id: 32,
 		img: 'https://images.unsplash.com/photo-1564557287817-3785e38ec1f5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
-		categorie: 'hoodie',
+		categorie: 'hoodies',
 		name: 'Cute Hoodie 2',
 		price: 34,
 		color: 'white',
@@ -385,7 +353,7 @@ export const AllProducts = [
 	{
 		id: 33,
 		img: 'https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
-		categorie: 'hoodie',
+		categorie: 'hoodies',
 		name: 'Cute Hoodie 3',
 		price: 28,
 		color: 'orange',
@@ -394,7 +362,7 @@ export const AllProducts = [
 	{
 		id: 34,
 		img: 'https://images.unsplash.com/photo-1609873814058-a8928924184a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
-		categorie: 'hoodie',
+		categorie: 'hoodies',
 		name: 'Cute Hoodie 4',
 		price: 93,
 		color: 'yellow',
@@ -403,7 +371,7 @@ export const AllProducts = [
 	{
 		id: 35,
 		img: 'https://images.unsplash.com/photo-1565978771542-0db9ab9ad3de?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
-		categorie: 'hoodie',
+		categorie: 'hoodies',
 		name: 'Cute Hoodie 5',
 		price: 87,
 		color: 'green',
@@ -412,7 +380,7 @@ export const AllProducts = [
 	{
 		id: 36,
 		img: 'https://images.unsplash.com/photo-1633292750937-120a94f5c2bb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
-		categorie: 'hoodie',
+		categorie: 'hoodies',
 		name: 'Cute Hoodie 6',
 		price: 45,
 		color: 'black',
@@ -421,7 +389,7 @@ export const AllProducts = [
 	{
 		id: 37,
 		img: 'https://images.unsplash.com/photo-1600923678350-bffdd369a828?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
-		categorie: 'hoodie',
+		categorie: 'hoodies',
 		name: 'Cute Hoodie 7',
 		price: 74,
 		color: 'pink',
@@ -430,7 +398,7 @@ export const AllProducts = [
 	{
 		id: 38,
 		img: 'https://images.unsplash.com/photo-1620780327051-f7ad06f5b1e0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80',
-		categorie: 'hoodie',
+		categorie: 'hoodies',
 		name: 'Cute Hoodie 8',
 		price: 36,
 		color: 'blue',
@@ -439,7 +407,7 @@ export const AllProducts = [
 	{
 		id: 39,
 		img: 'https://images.unsplash.com/photo-1577597759406-0bd867a7c07f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
-		categorie: 'hoodie',
+		categorie: 'hoodies',
 		name: 'Cute Hoodie 9',
 		price: 26,
 		color: 'red',
@@ -448,7 +416,7 @@ export const AllProducts = [
 	{
 		id: 40,
 		img: 'https://images.unsplash.com/photo-1601396344868-31e008cd6e7c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80',
-		categorie: 'hoodie',
+		categorie: 'hoodies',
 		name: 'Cute Hoodie 10',
 		price: 53,
 		color: 'white',

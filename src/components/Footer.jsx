@@ -198,7 +198,7 @@ const Footer = () => {
 					<ListItem onClick={() => handleShopNow('headwear')}>
 						Headwear
 					</ListItem>
-					<ListItem onClick={() => handleShopNow('hoodie')}>
+					<ListItem onClick={() => handleShopNow('hoodies')}>
 						Hoodies
 					</ListItem>
 					<ListItem>

@@ -12,6 +12,7 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import { FaRegUser } from 'react-icons/fa';
 import Footer from '../components/Footer';
+import { AllProducts, categories } from '../data';
 
 const StyledLink = styled(Link)`
 	text-decoration: none;
@@ -274,6 +275,25 @@ const Navbar = ({ showMessage, footerRef }) => {
 			.getElementById('footerScroll')
 			.scrollIntoView({ behavior: 'smooth' });
 	};
+	// make search work
+	const [searchVal, setSearchVal] = useState('');
+	const handleChange = (e) => {
+		setSearchVal(e.target.value);
+	};
+	const handleSearchClick = () => {
+		if (searchVal === '') return;
+		console.log(searchVal);
+		const a = AllProducts.find((el) => el.name == searchVal.toLowerCase());
+		const b = AllProducts.find((el) =>
+			el.sizes.includes(searchVal.toLowerCase())
+		);
+		const c = AllProducts.find((el) => el.color == searchVal.toLowerCase());
+		const d = categories.find(
+			(el) => el.title.toLowerCase() == searchVal.toLowerCase()
+		);
+
+		// create userSearchPage
+	};
 
 	return (
 		<Container>
@@ -284,9 +304,14 @@ const Navbar = ({ showMessage, footerRef }) => {
 					</BurgerIcon>
 					<Language>EN</Language>
 					<SearchContainer>
-						<Input />
+						<Input value={searchVal} onChange={handleChange} />
 						<IoSearchSharp
-							style={{ fontSize: '1.5rem', color: 'gray' }}
+							onClick={handleSearchClick}
+							style={{
+								fontSize: '1.5rem',
+								color: 'gray',
+								cursor: 'pointer',
+							}}
 						/>
 					</SearchContainer>
 					<SearchIcon onClick={handleMobileSearch}>
@@ -342,8 +367,12 @@ const Navbar = ({ showMessage, footerRef }) => {
 
 			<MobileContainer mobSearch={mobSearch}>
 				<MobileSearchContainer>
-					<MobileSearchInput placeholder="Search here..." />
-					<MobileSearchButton>
+					<MobileSearchInput
+						value={searchVal}
+						onChange={handleChange}
+						placeholder="Search here..."
+					/>
+					<MobileSearchButton onClick={handleSearchClick}>
 						Search <MdArrowForwardIos />
 					</MobileSearchButton>
 				</MobileSearchContainer>
@@ -409,7 +438,7 @@ const Navbar = ({ showMessage, footerRef }) => {
 					Headwear
 				</LowerMenuItem>
 				<Separator>/</Separator>
-				<LowerMenuItem onClick={() => handleShopNow('hoodie')}>
+				<LowerMenuItem onClick={() => handleShopNow('hoodies')}>
 					Hoodies
 				</LowerMenuItem>
 				<Separator>/</Separator>
