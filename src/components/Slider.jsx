@@ -86,9 +86,20 @@ const Button = styled.button`
 
 const Slider = () => {
 	const [slideIndex, setSlideIndex] = useState(0);
-	const { selectedCategory, setSelectedCategory } =
-		useContext(EcommerceContext);
+	const {
+		setSelectedCategory,
+		setCurrentPage,
+		setColor,
+		setSize,
+		setSortBy,
+	} = useContext(EcommerceContext);
 	const navigate = useNavigate();
+	const resetFilters = () => {
+		setColor('Color');
+		setSize('Size');
+		setSortBy('Sort By');
+		setCurrentPage(1);
+	};
 
 	const handleClick = (dir) => {
 		if (dir === 'left') {
@@ -104,6 +115,7 @@ const Slider = () => {
 	};
 	const HandleShopNow = (title) => {
 		setSelectedCategory(title.toLowerCase());
+		resetFilters();
 		navigate('/ProductList');
 	};
 	return (

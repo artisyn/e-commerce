@@ -10,6 +10,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import { desktop, tablet, tabletMin, mobile } from '../styles/responsive';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import logo from '../logo.jpg';
 
 const StyledLink = styled(Link)`
 	text-decoration: none;
@@ -150,18 +151,51 @@ const PaymentImage = styled.img`
 	height: 100%;
 `;
 
+const LogoWrap = styled.div`
+	width: 100%;
+	display: flex;
+	align-items: center;
+	${tablet({ justifyContent: 'center' })}
+`;
+
+const LogoContainer = styled.div`
+	width: 6rem;
+	height: 3rem;
+	overflow: hidden;
+`;
+const LogoPicture = styled.img`
+	max-height: 100%;
+`;
+
 const Footer = () => {
-	const { selectedCategory, setSelectedCategory } =
-		useContext(EcommerceContext);
+	const {
+		setSelectedCategory,
+		setCurrentPage,
+		setColor,
+		setSize,
+		setSortBy,
+	} = useContext(EcommerceContext);
 	const navigate = useNavigate();
+	const resetFilters = () => {
+		setColor('Color');
+		setSize('Size');
+		setSortBy('Sort By');
+		setCurrentPage(1);
+	};
 	const handleShopNow = (title) => {
 		setSelectedCategory(title.toLowerCase());
+		resetFilters();
 		navigate('/ProductList');
 	};
 	return (
 		<Container id="footerScroll">
 			<Left>
-				<Logo>Logo.</Logo>
+				<LogoWrap>
+					<LogoContainer>
+						<LogoPicture src={logo} />
+					</LogoContainer>
+				</LogoWrap>
+
 				<Description>
 					Lorem, ipsum dolor sit amet consectetur adipisicing elit.
 					Ipsa, culpa voluptatum quia officiis numquam voluptatem.

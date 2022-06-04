@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react';
 import { EcommerceContext } from '../context/context';
 import { tablet } from '../styles/responsive';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
 import Announcement from '../components/Announcement';
 import Newsletter from '../components/Newsletter';
 import Footer from '../components/Footer';
-
 import { FaCcMastercard } from 'react-icons/fa';
 import { FaCcVisa } from 'react-icons/fa';
 import { FaRegCreditCard } from 'react-icons/fa';
@@ -21,9 +21,10 @@ const Container = styled.div`
 const Wrapper = styled.div`
 	min-height: 100vh;
 	display: flex;
-	align-items: flex-start;
-	justify-content: center;
+	align-items: center;
+	justify-content: flex-start;
 	padding: 3rem 0.5rem 0.5rem 0.5rem;
+	flex-direction: column;
 `;
 const PaymentContainer = styled.div`
 	border: 1px solid black;
@@ -165,15 +166,22 @@ const Button = styled.button`
 		background-color: black;
 	}
 `;
+const MsgContainer = styled.div`
+	padding-top: 1rem;
+	color: teal;
+	font-size: 1.2rem;
+`;
 
 const Checkout = () => {
-	const { checkoutPrice, setCheckoutPrice } = useContext(EcommerceContext);
+	const { checkoutPrice, setCheckoutPrice, cartItems, setCartItems } =
+		useContext(EcommerceContext);
 	const [cardValue, setCardValue] = useState('');
 	const [sslValue, setSslValue] = useState('');
 	const [dateValue, setDateValue] = useState('');
+	const [message, setMessage] = useState('');
+	const navigate = useNavigate();
 	const HandleCardChange = (e) => {
-		console.log(e.nativeEvent.data === ' ');
-		// if (e.nativeEvent.data === ' ') return;
+		if (e.nativeEvent.data === ' ') return;
 		if (
 			e.target.value.length === 4 &&
 			e.nativeEvent.inputType !== 'deleteContentBackward'
@@ -219,7 +227,16 @@ const Checkout = () => {
 		}
 	};
 	const HandleConfirm = () => {
-		console.log('Thanks for purchase');
+		if (
+			cardValue.length === 19 &&
+			dateValue.length === 7 &&
+			sslValue.length === 3
+		) {
+			setCartItems([]);
+			navigate('/Thanks');
+			return;
+		}
+		setMessage('Please Fill Every input properly');
 	};
 
 	return (
@@ -298,6 +315,7 @@ const Checkout = () => {
 					</Message>
 					<Button onClick={HandleConfirm}>Confirm</Button>
 				</PaymentContainer>
+				<MsgContainer>{message}</MsgContainer>
 			</Wrapper>
 			<Newsletter />
 			<Footer />

@@ -11,8 +11,8 @@ import Badge from '@mui/material/Badge';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import { FaRegUser } from 'react-icons/fa';
-import Footer from '../components/Footer';
 import { AllProducts, categories } from '../data';
+import logo from '../logo.jpg';
 
 const StyledLink = styled(Link)`
 	text-decoration: none;
@@ -55,6 +55,7 @@ const SearchIcon = styled.span`
 	display: none;
 	${tablet({ display: 'block' })}
 `;
+const InputForm = styled.form``;
 const Input = styled.input`
 	border: none;
 	outline: none;
@@ -62,13 +63,16 @@ const Input = styled.input`
 `;
 const Language = styled.span`
 	font-size: 1.2rem;
-	cursor: pointer;
 	${tablet({ display: 'none' })}
 `;
-const Logo = styled.h1`
-	font-weight: bold;
-	margin: 0;
-	${tablet({ fontSize: '1.5rem' })}
+
+const LogoContainer = styled.div`
+	width: 6rem;
+	height: 3rem;
+	overflow: hidden;
+`;
+const LogoPicture = styled.img`
+	max-height: 100%;
 `;
 
 const MenuItem = styled.div`
@@ -91,6 +95,9 @@ const Left = styled.div`
 const Center = styled.div`
 	flex: 1;
 	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	${tablet({ flex: 'auto' })}
 `;
 const Right = styled.div`
@@ -188,7 +195,7 @@ const MenuContainer = styled.div`
 
 const MobileSection = styled.div`
 	border: 1px solid black;
-	height: 5rem;
+	height: 4rem;
 	margin-bottom: 0.5rem;
 `;
 const SectionItem = styled.div`
@@ -246,13 +253,38 @@ const Navbar = ({ showMessage, footerRef }) => {
 		cartItems,
 		selectedCategory,
 		setSelectedCategory,
+		searchResults,
+		setSearchResults,
+		setColor,
+		setSize,
+		setSortBy,
+		setCurrentPage,
 	} = useContext(EcommerceContext);
 	const navigate = useNavigate();
 	const [mobSearch, setMobSearch] = useState(false);
 	const [menu, setMenu] = useState(false);
-
+	const resetFilters = () => {
+		setColor('Color');
+		setSize('Size');
+		setSortBy('Sort By');
+		setCurrentPage(1);
+	};
 	const handleShopNow = (title) => {
 		setSelectedCategory(title.toLowerCase());
+		resetFilters();
+		navigate('/ProductList');
+	};
+	const handleShopNowNav = (title) => {
+		if (title === 'home') {
+			handleMenuOpen();
+			navigate('/Home');
+			return;
+		}
+
+		setSelectedCategory(title.toLowerCase());
+		resetFilters();
+		handleMenuOpen();
+
 		navigate('/ProductList');
 	};
 
@@ -275,24 +307,95 @@ const Navbar = ({ showMessage, footerRef }) => {
 			.getElementById('footerScroll')
 			.scrollIntoView({ behavior: 'smooth' });
 	};
-	// make search work
+	const handleClickFooterNav = () => {
+		handleMenuOpen();
+		document
+			.getElementById('footerScroll')
+			.scrollIntoView({ behavior: 'smooth' });
+	};
+
+	const handleRegisterNav = () => {
+		handleMenuOpen();
+		navigate('/Register');
+	};
+	const handleSignInNav = () => {
+		handleMenuOpen();
+		navigate('/Login');
+	};
+
 	const [searchVal, setSearchVal] = useState('');
+
+	// helper function
+	const handleConstructResultsB = (val) => {
+		let arr = [];
+		AllProducts.forEach((product) => {
+			if (product.sizes.includes(val.toUpperCase())) {
+				arr.push(product);
+			}
+		});
+		console.log(arr);
+		return arr;
+	};
+	const handleConstructResultsA = (val) => {
+		let arr = [];
+		AllProducts.forEach((product) => {
+			if (product.name.toLowerCase().includes(val.toLowerCase())) {
+				arr.push(product);
+			}
+		});
+		return arr;
+	};
+	const handleConstructResultsC = (val) => {
+		let arr = [];
+		AllProducts.forEach((product) => {
+			if (product.color === val.toLowerCase()) {
+				arr.push(product);
+			}
+		});
+		return arr;
+	};
+
 	const handleChange = (e) => {
 		setSearchVal(e.target.value);
 	};
-	const handleSearchClick = () => {
+	const handleSearchClick = (e) => {
+		e.preventDefault();
 		if (searchVal === '') return;
-		console.log(searchVal);
-		const a = AllProducts.find((el) => el.name == searchVal.toLowerCase());
-		const b = AllProducts.find((el) =>
-			el.sizes.includes(searchVal.toLowerCase())
+
+		const a = AllProducts.find((el) =>
+			el.name.toLowerCase().includes(searchVal.toLowerCase())
 		);
-		const c = AllProducts.find((el) => el.color == searchVal.toLowerCase());
+		const b = AllProducts.find((el) =>
+			el.sizes.includes(searchVal.toUpperCase())
+		);
+		const c = AllProducts.find(
+			(el) => el.color === searchVal.toLowerCase()
+		);
 		const d = categories.find(
 			(el) => el.title.toLowerCase() == searchVal.toLowerCase()
 		);
 
-		// create userSearchPage
+		if (!a && !b && !c && !d) {
+			setSearchResults([]);
+			navigate(`/SearchResults/:failed`);
+			return;
+		}
+		if (d) handleShopNow(searchVal);
+		if (b) {
+			setSearchResults(handleConstructResultsB(searchVal));
+			navigate(`/SearchResults/:${searchVal}`);
+			return;
+		}
+		if (a) {
+			setSearchResults(handleConstructResultsA(searchVal));
+			navigate(`/SearchResults/:${searchVal}`);
+			return;
+		}
+		if (c) {
+			setSearchResults(handleConstructResultsC(searchVal));
+			navigate(`/SearchResults/:${searchVal}`);
+			return;
+		}
 	};
 
 	return (
@@ -304,7 +407,10 @@ const Navbar = ({ showMessage, footerRef }) => {
 					</BurgerIcon>
 					<Language>EN</Language>
 					<SearchContainer>
-						<Input value={searchVal} onChange={handleChange} />
+						<InputForm onSubmit={handleSearchClick}>
+							<Input value={searchVal} onChange={handleChange} />
+						</InputForm>
+
 						<IoSearchSharp
 							onClick={handleSearchClick}
 							style={{
@@ -320,7 +426,10 @@ const Navbar = ({ showMessage, footerRef }) => {
 				</Left>
 				<Center>
 					<StyledLink to={'/Home'}>
-						<Logo>Logo.</Logo>
+						{/* <Logo>Logo.</Logo> */}
+						<LogoContainer>
+							<LogoPicture src={logo} />
+						</LogoContainer>
 					</StyledLink>
 				</Center>
 				<Right>
@@ -367,11 +476,14 @@ const Navbar = ({ showMessage, footerRef }) => {
 
 			<MobileContainer mobSearch={mobSearch}>
 				<MobileSearchContainer>
-					<MobileSearchInput
-						value={searchVal}
-						onChange={handleChange}
-						placeholder="Search here..."
-					/>
+					<InputForm onSubmit={handleSearchClick}>
+						<MobileSearchInput
+							value={searchVal}
+							onChange={handleChange}
+							placeholder="Search here..."
+						/>
+					</InputForm>
+
 					<MobileSearchButton onClick={handleSearchClick}>
 						Search <MdArrowForwardIos />
 					</MobileSearchButton>
@@ -380,39 +492,87 @@ const Navbar = ({ showMessage, footerRef }) => {
 			<MenuContainer menu={menu}>
 				<MobileSection>
 					<SectionItem>
-						<SectionCategory underline={true}>
-							Register <MdArrowForwardIos />
+						<SectionCategory
+							underline={true}
+							onClick={handleRegisterNav}
+						>
+							Register
+							<MdArrowForwardIos />
 						</SectionCategory>
-						<SectionCategory underline={true}>
-							Sign In <MdArrowForwardIos />
-						</SectionCategory>
-					</SectionItem>
-				</MobileSection>
-				<MobileSection>
-					<SectionItem>
-						<SectionCategory>
-							MEN <MdArrowForwardIos />
-						</SectionCategory>
-					</SectionItem>
-				</MobileSection>
-				<MobileSection>
-					<SectionItem>
-						<SectionCategory>
-							WOMEN <MdArrowForwardIos />
+						<SectionCategory
+							underline={true}
+							onClick={handleSignInNav}
+						>
+							Sign In
+							<MdArrowForwardIos />
 						</SectionCategory>
 					</SectionItem>
 				</MobileSection>
 				<MobileSection>
 					<SectionItem>
-						<SectionCategory>
-							KIDS <MdArrowForwardIos />
+						<SectionCategory
+							onClick={() => handleShopNowNav('home')}
+						>
+							HOME
+							<MdArrowForwardIos />
 						</SectionCategory>
 					</SectionItem>
 				</MobileSection>
 				<MobileSection>
 					<SectionItem>
-						<SectionCategory>
-							ACCESSORIES <MdArrowForwardIos />
+						<SectionCategory
+							onClick={() => handleShopNowNav('all')}
+						>
+							ALL CATEGORIES
+							<MdArrowForwardIos />
+						</SectionCategory>
+					</SectionItem>
+				</MobileSection>
+				<MobileSection>
+					<SectionItem>
+						<SectionCategory
+							onClick={() => handleShopNowNav('sneakers')}
+						>
+							SNEAKERS
+							<MdArrowForwardIos />
+						</SectionCategory>
+					</SectionItem>
+				</MobileSection>
+				<MobileSection>
+					<SectionItem>
+						<SectionCategory
+							onClick={() => handleShopNowNav('shirts')}
+						>
+							SHIRTS
+							<MdArrowForwardIos />
+						</SectionCategory>
+					</SectionItem>
+				</MobileSection>
+				<MobileSection>
+					<SectionItem>
+						<SectionCategory
+							onClick={() => handleShopNowNav('headwear')}
+						>
+							HEADWEAR
+							<MdArrowForwardIos />
+						</SectionCategory>
+					</SectionItem>
+				</MobileSection>
+				<MobileSection>
+					<SectionItem>
+						<SectionCategory
+							onClick={() => handleShopNowNav('hoodies')}
+						>
+							HOODIES
+							<MdArrowForwardIos />
+						</SectionCategory>
+					</SectionItem>
+				</MobileSection>
+				<MobileSection>
+					<SectionItem>
+						<SectionCategory onClick={handleClickFooterNav}>
+							FOOTER
+							<MdArrowForwardIos />
 						</SectionCategory>
 					</SectionItem>
 				</MobileSection>

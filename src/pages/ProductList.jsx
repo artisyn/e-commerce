@@ -60,11 +60,16 @@ const Icon = styled.span`
 `;
 
 const ProductList = () => {
-	const { selectedCategory, setSelectedCategory } =
-		useContext(EcommerceContext);
-	const [color, setColor] = useState('');
-	const [size, setSize] = useState('');
-	const [sortBy, setSortBy] = useState('');
+	const {
+		selectedCategory,
+		setSelectedCategory,
+		color,
+		setColor,
+		size,
+		setSize,
+		sortBy,
+		setSortBy,
+	} = useContext(EcommerceContext);
 
 	const HandleColorChange = (e) => {
 		setColor(e.target.value);
@@ -89,8 +94,8 @@ const ProductList = () => {
 							<IoOptions />
 						</Icon>
 					</FilterText>
-					<Select onChange={HandleColorChange} defaultValue={'color'}>
-						<Option value={'color'}>Color</Option>
+					<Select onChange={HandleColorChange} value={color}>
+						<Option value={'Color'}>Color</Option>
 						<Option>Green</Option>
 						<Option>Red</Option>
 						<Option>Blue</Option>
@@ -100,8 +105,8 @@ const ProductList = () => {
 						<Option>Black</Option>
 						<Option>White</Option>
 					</Select>
-					<Select onChange={HandleSizeChange} defaultValue={'size'}>
-						<Option value={'size'}>Size</Option>
+					<Select onChange={HandleSizeChange} value={size}>
+						<Option value={'Size'}>Size</Option>
 						<Option>XS</Option>
 						<Option>S</Option>
 						<Option>M</Option>
@@ -119,8 +124,8 @@ const ProductList = () => {
 							<BiSort />
 						</Icon>
 					</FilterText>
-					<Select onChange={HandleSortBy} defaultValue={'sort by'}>
-						<Option value={'sort by'} disabled>
+					<Select onChange={HandleSortBy} value={sortBy}>
+						<Option value={'Sort by'} disabled>
 							Sort By
 						</Option>
 						<Option>Popular</Option>
@@ -129,7 +134,7 @@ const ProductList = () => {
 					</Select>
 				</Filter>
 			</FilterContainer>
-			<Products color={color} size={size} sortBy={sortBy} />
+			<Products />
 			<PopularProducts />
 			<Newsletter />
 			<Footer />

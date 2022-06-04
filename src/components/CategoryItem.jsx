@@ -54,11 +54,23 @@ const Button = styled.button`
 `;
 
 const CategoryItem = ({ item }) => {
-	const { selectedCategory, setSelectedCategory } =
-		useContext(EcommerceContext);
+	const {
+		setSelectedCategory,
+		setCurrentPage,
+		setColor,
+		setSize,
+		setSortBy,
+	} = useContext(EcommerceContext);
 	const navigate = useNavigate();
+	const resetFilters = () => {
+		setColor('Color');
+		setSize('Size');
+		setSortBy('Sort By');
+		setCurrentPage(1);
+	};
 	const HandleShopNow = (title) => {
 		setSelectedCategory(title.toLowerCase());
+		resetFilters();
 		navigate('/ProductList');
 	};
 	return (
