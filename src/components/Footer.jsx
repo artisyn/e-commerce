@@ -166,6 +166,9 @@ const LogoContainer = styled.div`
 const LogoPicture = styled.img`
 	max-height: 100%;
 `;
+const GitLink = styled.a`
+	margin-right: 0.5rem;
+`;
 
 const Footer = () => {
 	const {
@@ -197,10 +200,10 @@ const Footer = () => {
 				</LogoWrap>
 
 				<Description>
-					Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-					Ipsa, culpa voluptatum quia officiis numquam voluptatem.
-					Odit eligendi neque, iste quia ratione corporis nam saepe
-					dolorem.
+					This Project was made using React and React styled
+					components. It is a part of{' '}
+					<GitLink href="https://github.com/artisyn">artisyn</GitLink>
+					portfolio.
 				</Description>
 				<SocialContainer>
 					<SocialIcon color="#003c95b2">
